@@ -1,7 +1,9 @@
 ## 開発ルール
 
--   **コードの出力先**: これから作成するすべてのサンプルコードは、学習者が写経しやすいように `examples/` ディレクトリ配下に出力します。
--   **学習方法**: 学習者は `examples/` に出力されたコードを参考に、手で書き写す（写経する）形式で学習を進めます。
+-   **コードの役割分担**:
+    -   `examples/src`：私（AI）が作成する**お手本コード**を配置します。
+    -   `src`：あなた（学習者）が、お手本を参考に**実際に書き写すコード**を配置します。
+-   **実行対象**: `npm start` などのコマンドは、あなたが作成する `src` ディレクトリ内のコードを実行します。これにより、ご自身で書いたコードの動作確認ができます。
 
 ---
 
@@ -42,7 +44,9 @@ TypeScriptプロジェクトの土台を構築する。
     ```bash
     npm init -y
     ```
-2.  **必要なパッケージのインストール**:
+2.  **`.gitignore`ファイルの作成**: `node_modules`やビルド成果物など、バージョン管理に不要なファイルを指定する。
+
+3.  **必要なパッケージのインストール**:
     ```bash
     # TypeScript本体と、Node.jsの型定義ファイル
     npm install --save-dev typescript @types/node
@@ -53,35 +57,41 @@ TypeScriptプロジェクトの土台を構築する。
     # CLIを簡単に構築するためのcommander
     npm install commander
     ```
-3.  **`tsconfig.json`の生成と設定**:
-    ```bash
-    npx tsc --init
-    ```
-    生成されたファイルに、以下の設定を推奨する。
-    -   `"target": "ES2020"`
-    -   `"module": "NodeNext"`
-    -   `"moduleResolution": "NodeNext"`
-    -   `"strict": true`
-    -   `"outDir": "./dist"` (コンパイル後のJS出力先)
-    -   `"rootDir": "./src"` (ソースコードの場所)
-4.  **`package.json`にスクリプトを追加**:
+4.  **TypeScript設定ファイルの作成**:
+    -   **`tsconfig.json`**: あなたが`src`に書くコード用の設定ファイル。
+        ```bash
+        npx tsc --init
+        ```
+        -   `rootDir` は `"./src"` に設定。
+    -   **`tsconfig.examples.json`**: 私（AI）が`examples/src`に書くお手本コード用の設定ファイル。
+        -   `tsconfig.json`をコピーして作成。
+        -   `rootDir` を `"./examples/src"` に、`outDir` を `"./dist-examples"` に変更。
+
+5.  **`package.json`にスクリプトを追加**:
     開発を効率化するためのスクリプトを定義する。
     ```json
     "scripts": {
       "start": "ts-node src/index.ts",
-      "build": "tsc"
+      "start:example": "ts-node --project tsconfig.examples.json examples/src/index.ts",
+      "build": "tsc",
+      "build:example": "tsc --project tsconfig.examples.json",
+      "test": "echo \"Error: no test specified\" && exit 1"
     }
     ```
-5.  **ディレクトリ作成**:
+6.  **ディレクトリ作成**:
     ```bash
+    # あなたがコードを書くディレクトリ
     mkdir src
+
+    # AIがお手本コードを書くディレクトリ
+    mkdir -p examples/src
     ```
 
 ### ステップ2: 型定義とデータ永続化層の実装
 
 アプリケーションで扱うデータ構造を定義し、それをファイルに保存・読み込みする仕組みを作る。
 
-1.  **`src/types.ts`の作成**: `Todo`タスクを表す`interface`を定義する。
+1.  **`examples/src/types.ts`の作成**: `Todo`タスクを表す`interface`を定義する。
     ```typescript
     export interface Todo {
       id: number;
@@ -89,25 +99,19 @@ TypeScriptプロジェクトの土台を構築する。
       completed: boolean;
     }
     ```
-2.  **`src/storage.ts`の作成**: TodoデータをJSONファイル(`todos.json`)に保存・読み込みする関数を実装する。
-    -   `readTodos(): Promise<Todo[]>`: JSONファイルを非同期で読み込み、`Todo`の配列を返す。ファイルが存在しない場合は空の配列を返す。
-    -   `writeTodos(todos: Todo[]): Promise<void>`: `Todo`の配列を受け取り、JSONファイルに非同期で書き込む。
-    -   ここでは `fs/promises` を使用して、`async/await` の良い練習とする。
+    （あなたはこのファイルを参考に `src/types.ts` を作成します）
+
+2.  **`examples/src/storage.ts`の作成**: TodoデータをJSONファイル(`todos.json`)に保存・読み込みする関数を実装する。
+    -   `readTodos(): Promise<Todo[]>`
+    -   `writeTodos(todos: Todo[]): Promise<void>`
+    （あなたはこのファイルを参考に `src/storage.ts` を作成します）
 
 ### ステップ3: コマンドロジックとCLIエントリーポイントの実装
 
 CLIの骨格を作り、各コマンドの処理を実装する。
 
-1.  **`src/commands.ts`の作成**: 各コマンド（add, list, done, delete）の具体的なロジックを実装する関数を作成する。
-    -   `addTodo(title: string)`
-    -   `listTodos()`
-    -   `completeTodo(id: number)`
-    -   `removeTodo(id: number)`
-    -   これらの関数は `storage.ts` の関数を呼び出して、データの読み書きを行う。
-2.  **`src/index.ts`の作成**: `commander` を使ってCLIの定義を行う。
-    -   プログラムのバージョンや説明を設定する。
-    -   `add`, `list`, `done`, `delete` の各コマンドを定義する。
-    -   各コマンドが実行されたときに、`commands.ts` で定義した対応する関数を呼び出すようにする。
+1.  **`examples/src/commands.ts`の作成**: 各コマンドの具体的なロジックを実装する。
+2.  **`examples/src/index.ts`の作成**: `commander` を使ってCLIの定義を行う。
 
 ### ステップ4: コード品質ツールの導入（リンターとフォーマッター）
 
@@ -117,10 +121,11 @@ CLIの骨格を作り、各コマンドの処理を実装する。
     ```bash
     npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin prettier eslint-config-prettier
     ```
-2.  **設定ファイルの作成**: `.eslintrc.js` と `.prettierrc.json` を作成し、基本的なルールを設定する。
+2.  **設定ファイルの作成**: `.eslintrc.js` と `.prettierrc.json` を作成する。
 3.  **`package.json`にスクリプトを追加**:
     ```json
     "scripts": {
+      // ... existing scripts
       "lint": "eslint . --ext .ts",
       "format": "prettier --write ."
     }
@@ -130,18 +135,21 @@ CLIの骨格を作り、各コマンドの処理を実装する。
 
 ```
 typescript-example-01/
-├── examples/
+├── src/              # あなたが作成するコード
+│   ├── index.ts
+│   └── ...
+├── examples/         # AIが作成するお手本コード
 │   └── src/
-│       ├── index.ts      # CLIのエントリーポイント、commanderによるコマンド定義
-│       ├── types.ts      # Todoインターフェースなどの型定義
-│       ├── storage.ts    # ファイルI/O（データの永続化）
-│       └── commands.ts   # 各コマンドの具体的な処理ロジック
+│       ├── index.ts
+│       └── ...
 ├── node_modules/
-├── .eslintrc.js      # ESLint設定ファイル
-├── .prettierrc.json  # Prettier設定ファイル
+├── .gitignore
+├── .eslintrc.js
+├── .prettierrc.json
 ├── package.json
 ├── package-lock.json
 ├── tsconfig.json
+├── tsconfig.examples.json
 └── todos.json        # Todoデータが保存されるファイル
 ```
 
