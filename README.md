@@ -1,1 +1,0 @@
-# typescript-example-01

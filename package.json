@@ -1,36 +1,14 @@
 {
   "name": "typescript-example-01",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "example": "examples"
-  },
+  "private": true,
+  "type": "module",
   "scripts": {
-    "start": "ts-node src/index.ts",
-    "start:example": "ts-node --project tsconfig.examples.json examples/src/index.ts",
-    "build": "tsc",
-    "build:example": "tsc --project tsconfig.examples.json",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx",
+    "check": "tsc -p tsconfig.json --noEmit"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yamadatarousan/typescript-example-01.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/yamadatarousan/typescript-example-01/issues"
-  },
-  "homepage": "https://github.com/yamadatarousan/typescript-example-01#readme",
   "devDependencies": {
     "@types/node": "^25.0.9",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
-  },
-  "dependencies": {
-    "commander": "^14.0.2"
+    "tsx": "^4.16.2",
+    "typescript": "^5.6.3"
   }
 }
