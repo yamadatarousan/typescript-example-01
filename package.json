@@ -4,11 +4,19 @@
   "type": "module",
   "scripts": {
     "dev": "tsx",
-    "check": "tsc -p tsconfig.json --noEmit"
+    "check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "fastify": "^4.29.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/node": "^25.0.9",
+    "@types/supertest": "^2.0.16",
+    "supertest": "^7.0.0",
     "tsx": "^4.16.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
   }
 }
