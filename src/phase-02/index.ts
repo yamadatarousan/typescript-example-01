@@ -89,7 +89,9 @@ function formatDate(isoString: string): string {
 
 function formatTodo(todo: Todo): string {
     const status = todo.status === "done" ? "[x]" : "[ ]";
-    return `${status} ${todo.id}: ${todo.title}`;
+    const created = formatDate(todo.createdAt)
+    const done = todo.doneAt ? ` done:${formatDate(todo.doneAt)}` : "";
+    return `${status} ${todo.id}: ${todo.title} (created:${created}${done})`;
 }
 
 function parseId(input: string | undefined): number | null {
