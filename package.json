@@ -5,15 +5,21 @@
   "scripts": {
     "dev": "tsx",
     "check": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest"
+    "test": "vitest",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
   },
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "fastify": "^4.29.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/node": "^25.0.9",
     "@types/supertest": "^2.0.16",
+    "prisma": "^5.22.0",
     "supertest": "^7.0.0",
     "tsx": "^4.16.2",
     "typescript": "^5.6.3",
