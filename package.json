@@ -15,6 +15,7 @@
     "test:db": "npx dotenv-cli -e .env.test -- vitest"
   },
   "dependencies": {
+    "@fastify/cors": "^9.0.1",
     "@prisma/client": "^5.22.0",
     "fastify": "^4.29.0",
     "zod": "^3.24.1"
