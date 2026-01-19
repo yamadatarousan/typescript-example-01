@@ -1,4 +1,5 @@
 import fastify, { FastifyInstance } from "fastify";
+import cors from "@fastify/cors";
 import { z } from "zod";
 import { PrismaClient } from "@prisma/client";
 
@@ -30,6 +31,10 @@ function parseId(input: string): number | null {
 
 export function buildApp(): FastifyInstance {
   const app = fastify();
+
+  app.register(cors, {
+    origin: ["http://localhost:5173"],
+  });
 
   app.get("/todos", async () => {
     const items = await prisma.todo.findMany({ orderBy: { id: "asc" } });
