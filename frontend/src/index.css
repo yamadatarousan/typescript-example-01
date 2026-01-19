@@ -1,0 +1,15 @@
+/* Tailwindの基本スタイルを取り込む */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* アプリ全体の基本トーン */
+:root {
+  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  color-scheme: dark;
+}
+
+/* デフォルトの余白を外す */
+body {
+  margin: 0;
+}
