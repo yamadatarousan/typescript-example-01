@@ -10,6 +10,7 @@ import {
 import type { Todo } from "../../types/todo";
 import { useTodoFilterStore } from "../../store/todoFilter";
 
+// 日付は見やすい形に変換する
 function formatDate(value: string | null | undefined): string {
   if (!value) return "-";
   return value.slice(0, 10);
@@ -20,11 +21,13 @@ export default function TodoApp() {
   const [title, setTitle] = useState("");
   const { filter, setFilter } = useTodoFilterStore();
 
+  // APIからTODO一覧を取得する
   const todosQuery = useQuery({
     queryKey: ["todos"],
     queryFn: fetchTodos,
   });
 
+  // 追加・更新・削除はMutationで扱う
   const createMutation = useMutation({
     mutationFn: createTodo,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["todos"] }),

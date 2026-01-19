@@ -6,6 +6,7 @@ import "./index.css";
 
 const queryClient = new QueryClient();
 
+// ルートにアプリをマウントし、React Queryのキャッシュを共有する
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>

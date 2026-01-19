@@ -1,5 +1,6 @@
 import type { Todo, TodoStatus } from "../types/todo";
 
+// Viteの環境変数からAPIエンドポイントを取得する
 const API_BASE = import.meta.env.VITE_API_BASE ?? "http://localhost:3000";
 
 type TodoListResponse = {
@@ -10,6 +11,7 @@ type ApiError = {
   message: string;
 };
 
+// レスポンスの成否を統一的に扱う
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
     let message = "Request failed.";
@@ -22,6 +24,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
     throw new Error(message);
   }
 
+  // No Contentの時はボディが無いのでundefinedを返す
   if (response.status === 204) {
     return undefined as T;
   }

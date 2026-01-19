@@ -1,5 +1,6 @@
 import { create } from "zustand";
 
+// Todo一覧の表示フィルタ
 type Filter = "all" | "todo" | "done";
 
 type TodoFilterState = {
@@ -7,6 +8,7 @@ type TodoFilterState = {
   setFilter: (filter: Filter) => void;
 };
 
+// フィルタ状態を共有するストア
 export const useTodoFilterStore = create<TodoFilterState>((set) => ({
   filter: "all",
   setFilter: (filter) => set({ filter }),
