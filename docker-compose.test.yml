@@ -1,0 +1,15 @@
+services:
+  db_test:
+    image: postgres:16
+    container_name: typescript-example-01-db-test
+    ports:
+      - "5437:5432"
+    environment:
+      POSTGRES_USER: todo
+      POSTGRES_PASSWORD: todo
+      POSTGRES_DB: todo_app_test
+    volumes:
+      - db_test_data:/var/lib/postgresql/data
+
+volumes:
+  db_test_data:

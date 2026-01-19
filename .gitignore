@@ -6,3 +6,6 @@ data/todos.json
 
 # Env
 .env
+.env.test
+.env.test.example
+.env.example

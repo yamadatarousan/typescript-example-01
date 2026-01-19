@@ -8,8 +8,11 @@
     "test": "vitest",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
+    "db:test:up": "docker compose -f docker-compose.test.yml up -d",
+    "db:test:down": "docker compose -f docker-compose.test.yml down",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev"
+    "prisma:migrate": "prisma migrate dev",
+    "test:db": "npx dotenv-cli -e .env.test -- vitest"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
@@ -19,6 +22,7 @@
   "devDependencies": {
     "@types/node": "^25.0.9",
     "@types/supertest": "^2.0.16",
+    "dotenv-cli": "^7.4.3",
     "prisma": "^5.22.0",
     "supertest": "^7.0.0",
     "tsx": "^4.16.2",
