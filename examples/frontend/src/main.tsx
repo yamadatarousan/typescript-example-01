@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
 import "./index.css";
 
+// React Queryのキャッシュと設定を保持するクライアント
 const queryClient = new QueryClient();
 
 // ルートにアプリをマウントし、React Queryのキャッシュを共有する

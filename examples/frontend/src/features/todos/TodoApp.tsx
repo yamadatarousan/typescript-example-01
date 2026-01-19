@@ -17,8 +17,11 @@ function formatDate(value: string | null | undefined): string {
 }
 
 export default function TodoApp() {
+  // React Queryのキャッシュ操作を行うために取得
   const queryClient = useQueryClient();
+  // フォーム入力のローカル状態
   const [title, setTitle] = useState("");
+  // 表示フィルタはZustandで共有する
   const { filter, setFilter } = useTodoFilterStore();
 
   // APIからTODO一覧を取得する
@@ -50,12 +53,14 @@ export default function TodoApp() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["todos"] }),
   });
 
+  // フィルタ状態に合わせて表示するTodoを絞る
   const filteredTodos = useMemo(() => {
     const items = todosQuery.data ?? [];
     if (filter === "all") return items;
     return items.filter((todo) => todo.status === filter);
   }, [todosQuery.data, filter]);
 
+  // 追加フォームの送信処理
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const trimmed = title.trim();
@@ -71,6 +76,7 @@ export default function TodoApp() {
     updateStatusMutation.mutate({ id: todo.id, status: nextStatus });
   }
 
+  // ブラウザの簡易入力でタイトルを更新する
   function handleEdit(todo: Todo) {
     const nextTitle = window.prompt("New title", todo.title);
     if (!nextTitle) return;
@@ -89,6 +95,7 @@ export default function TodoApp() {
         </header>
 
         <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6 shadow-xl shadow-black/30">
+          {/* 追加フォームとフィルタ切り替え */}
           <form className="flex flex-col gap-3 md:flex-row" onSubmit={handleSubmit}>
             <input
               value={title}
@@ -123,6 +130,7 @@ export default function TodoApp() {
         </section>
 
         <section className="grid gap-4">
+          {/* 状態表示とTodo一覧 */}
           {todosQuery.isLoading && <p className="text-slate-400">Loading...</p>}
           {todosQuery.isError && (
             <p className="text-red-300">{(todosQuery.error as Error).message}</p>

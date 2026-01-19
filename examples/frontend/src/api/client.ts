@@ -7,6 +7,7 @@ type TodoListResponse = {
   items: Todo[];
 };
 
+// APIが返すエラーメッセージの最低限の形
 type ApiError = {
   message: string;
 };
@@ -33,12 +34,14 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 export async function fetchTodos(): Promise<Todo[]> {
+  // 一覧取得
   const response = await fetch(`${API_BASE}/todos`);
   const data = await handleResponse<TodoListResponse>(response);
   return data.items;
 }
 
 export async function createTodo(title: string): Promise<Todo> {
+  // 作成
   const response = await fetch(`${API_BASE}/todos`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -49,6 +52,7 @@ export async function createTodo(title: string): Promise<Todo> {
 }
 
 export async function updateTodoStatus(id: number, status: TodoStatus): Promise<Todo> {
+  // ステータス更新
   const response = await fetch(`${API_BASE}/todos/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -59,6 +63,7 @@ export async function updateTodoStatus(id: number, status: TodoStatus): Promise<
 }
 
 export async function updateTodoTitle(id: number, title: string): Promise<Todo> {
+  // タイトル更新
   const response = await fetch(`${API_BASE}/todos/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -69,6 +74,7 @@ export async function updateTodoTitle(id: number, title: string): Promise<Todo> 
 }
 
 export async function deleteTodo(id: number): Promise<void> {
+  // 削除
   const response = await fetch(`${API_BASE}/todos/${id}`, {
     method: "DELETE",
   });

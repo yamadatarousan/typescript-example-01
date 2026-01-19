@@ -5,6 +5,7 @@ type Filter = "all" | "todo" | "done";
 
 type TodoFilterState = {
   filter: Filter;
+  // フィルタの更新関数
   setFilter: (filter: Filter) => void;
 };
 
