@@ -153,6 +153,8 @@ UIを作って実際に操作できるようにする
 - エラー: 400（Invalid body）、401（Invalid credentials）、409（Email already registered）
 - JWT期限: `7d`
 - `/todos` は `Authorization: Bearer <token>` 必須
+- `/todos` 未認証は `401` + `{ message: "Unauthorized." }`
+- 認証OKでも他人のTodoは `404`（存在を隠す）
 
 #### 学ぶこと
 - Reactコンポーネント
