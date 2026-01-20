@@ -35,12 +35,12 @@
 ターミナルで動くTODOを作り、TypeScriptの型と基本構文に慣れる
 
 #### 実装内容
-- [ ] 追加（add）
-- [ ] 一覧（list）
-- [ ] 完了（done）
-- [ ] 削除（remove）
-- [ ] 全削除（clear）
-- [ ] JSONファイル保存（data/todos.json）
+- [x] 追加（add）
+- [x] 一覧（list）
+- [x] 完了（done）
+- [x] 削除（remove）
+- [x] 全削除（clear）
+- [x] JSONファイル保存（data/todos.json）
 
 #### 学ぶこと
 - 基本型（string/number/boolean/union）
@@ -60,10 +60,10 @@
 実用に近づける
 
 #### 実装内容
-- [ ] editコマンド追加
-- [ ] toggle（done/undone）
-- [ ] listの表示改善（createdAt表示）
-- [ ] コマンドのエラーメッセージ改善
+- [x] editコマンド追加
+- [x] toggle（done/undone）
+- [x] listの表示改善（createdAt表示）
+- [x] コマンドのエラーメッセージ改善
 
 #### 学ぶこと
 - 型ガード
@@ -86,12 +86,12 @@ HTTP APIとしてTODO操作できるようにする
 - Vitest + Supertest
 
 #### 実装内容
-- [ ] GET /todos
-- [ ] POST /todos
-- [ ] PUT /todos/:id
-- [ ] DELETE /todos/:id
-- [ ] バリデーション
-- [ ] エラーハンドリング
+- [x] GET /todos
+- [x] POST /todos
+- [x] PUT /todos/:id
+- [x] DELETE /todos/:id
+- [x] バリデーション
+- [x] エラーハンドリング
 
 #### 学ぶこと
 - リクエスト/レスポンス型
@@ -114,9 +114,9 @@ DBでデータを永続化する
 - Prisma
 
 #### 実装内容
-- [ ] Prismaセットアップ
-- [ ] User / Todoスキーマ
-- [ ] CRUD APIをDB対応
+- [x] Prismaセットアップ
+- [x] User / Todoスキーマ
+- [x] CRUD APIをDB対応
 
 #### 学ぶこと
 - DB設計
@@ -185,4 +185,4 @@ UIを作って実際に操作できるようにする
 ---
 
 最終更新: 2026-01-12
-ステータス: Phase 1 開始
+ステータス: Phase 4 完了
