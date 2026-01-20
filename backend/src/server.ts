@@ -20,7 +20,7 @@ const updateTodoSchema = z
     message: "Either title or status is required.",
   });
 
-  type ApiError = {
+type ApiError = {
   message: string;
 };
 
@@ -30,87 +30,87 @@ function parseId(input: string): number | null {
 }
 
 export function buildApp(): FastifyInstance {
-    const app = fastify();
+  const app = fastify();
 
-    app.register(cors, {
-        origin: ["http://localhost:5173"],
+  app.register(cors, {
+    origin: ["http://localhost:5173"],
+  });
+
+  app.get("/todos", async () => {
+    const items = await prisma.todo.findMany({ orderBy: { id: "asc" } });
+    return { items };
+  });
+
+  app.post("/todos", async (request, reply) => {
+    const parsed = createTodoSchema.safeParse(request.body);
+    if (!parsed.success) {
+      const error: ApiError = { message: "Invalid body." };
+      return reply.code(400).send(error);
+    }
+
+    const todo = await prisma.todo.create({
+      data: {
+        title: parsed.data.title,
+      },
     });
 
-    app.get("/todos", async () => {
-        const items = await prisma.todo.findMany({ orderBy: { id: "asc" } });
-        return { items };
-    });
+    return reply.code(201).send(todo);
+  });
 
-    app.post("/todos", async (request, reply) => {
-        const parsed = createTodoSchema.safeParse(request.body);
-        if (!parsed.success) {
-        const error: ApiError = { message: "Invalid body." };
-        return reply.code(400).send(error);
-        }
+  app.put<{ Params: { id: string } }>("/todos/:id", async (request, reply) => {
+    const id = parseId(request.params.id);
+    if (id === null) {
+      const error: ApiError = { message: "Invalid id." };
+      return reply.code(400).send(error);
+    }
 
-        const todo = await prisma.todo.create({
-            data: {
-                title: parsed.data.title,
-            },
-        });
+    const parsed = updateTodoSchema.safeParse(request.body);
+    if (!parsed.success) {
+      const error: ApiError = { message: parsed.error.issues[0]?.message ?? "Invalid body." };
+      return reply.code(400).send(error);
+    }
 
-        return reply.code(201).send(todo);
-    });
+    const target = await prisma.todo.findUnique({ where: { id } });
+    if (!target) {
+      const error: ApiError = { message: "Todo not found." };
+      return reply.code(404).send(error);
+    }
 
-    app.put<{ Params: { id: string } }>("/todos/:id", async (request, reply) => {
-        const id = parseId(request.params.id);
-        if (id === null) {
-            const error: ApiError = { message: "Invalid id." };
-            return reply.code(400).send(error);
-        }
+    const data: { title?: string; status?: string; doneAt?: Date | null } = {};
 
-        const parsed = updateTodoSchema.safeParse(request.body);
-            if (!parsed.success) {
-            const error: ApiError = { message: parsed.error.issues[0]?.message ?? "Invalid body." };
-            return reply.code(400).send(error);
-        }
+    if (parsed.data.title) {
+      data.title = parsed.data.title;
+    }
 
-        const target = await prisma.todo.findUnique({ where: { id }});
-        if (!target) {
-            const error: ApiError = { message: "Todo not found." };
-            return reply.code(404).send(error);
-        }
+    if (parsed.data.status) {
+      data.status = parsed.data.status;
+      data.doneAt = parsed.data.status === "done" ? new Date() : null;
+    }
 
-        const data: { title?: string; status?: string; doneAt?: Date | null } = {};
+    const todo = await prisma.todo.update({ where: { id }, data });
+    return reply.send(todo);
+  });
 
-        if (parsed.data.title) {
-            data.title = parsed.data.title;
-        }
+  app.delete<{ Params: { id: string } }>("/todos/:id", async (request, reply) => {
+    const id = parseId(request.params.id);
+    if (id === null) {
+      const error: ApiError = { message: "Invalid id." };
+      return reply.code(400).send(error);
+    }
 
-        if (parsed.data.status) {
-            data.status = parsed.data.status;
-            data.doneAt = parsed.data.status === "done" ? new Date() : null;
-        }        
+    const target = await prisma.todo.findUnique({ where: { id } });
+    if (!target) {
+      const error: ApiError = { message: "Todo not found." };
+      return reply.code(404).send(error);
+    }
 
-        const todo = await prisma.todo.update({ where: { id }, data });
-        return reply.send(todo);
-    });
+    await prisma.todo.delete({ where: { id } });
+    return reply.code(204).send();
+  });
 
-    app.delete<{ Params: { id: string } }>("/todos/:id", async (request, reply) => {
-        const id = parseId(request.params.id);
-        if (id === null) {
-            const error: ApiError = { message: "Invalid id." };
-            return reply.code(400).send(error);
-        }
+  app.addHook("onClose", async () => {
+    await prisma.$disconnect();
+  });
 
-        const target = await prisma.todo.findUnique({ where: { id } });
-        if (!target) {
-            const error: ApiError = { message: "Todo not found." };
-            return reply.code(404).send(error);
-        }
-
-        await prisma.todo.delete({ where: { id } });
-        return reply.code(204).send();
-    });
-
-    app.addHook("onClose", async () => {
-        await prisma.$disconnect();
-    });
-
-    return app;
+  return app;
 }
