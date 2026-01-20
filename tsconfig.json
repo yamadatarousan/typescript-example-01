@@ -8,5 +8,5 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["examples/**/*", "src/**/*"]
+  "include": ["backend/**/*", "examples/**/*"]
 }

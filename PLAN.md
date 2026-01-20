@@ -2,9 +2,11 @@
 
 ## 前提
 - 学習は「動くTODOアプリを段階的に育てる」形式で進める
-- 自分が写経するコードは `src/` に置く
-- AIが作る参照コードは `examples/` に置く
 - 1フェーズごとに「動くもの」を必ず作る
+- バックエンド（写経）は `backend/` に置く（内部の `src/` 構造は維持）
+- バックエンド（参照）は `examples/backend/` に置く（内部の `src/` 構造は維持）
+- フロントエンド（写経）は `frontend/` に置く
+- フロントエンド（参照）は `examples/frontend/` に置く
 - コメントは日本語で書く
 - 変更ごとに動作確認を行う
 
@@ -49,8 +51,8 @@
 - ファイルI/O（fs/promises）
 
 #### 成果物
-- `src/index.ts`（CLI TODOアプリ）
-- 実行例: `npm run dev -- src/index.ts add "Buy milk"`
+- `backend/src/index.ts`（CLI TODOアプリ）
+- 実行例: `npm run dev -- backend/src/index.ts add "Buy milk"`
 
 ---
 
@@ -186,10 +188,9 @@ server.tsの責務を分離して学習しやすい構成にする
 
 ## ディレクトリ運用ルール
 
-- AIが出す参照コード: `examples/`
-- 自分で写経するコード: `src/`
-- フェーズごとにサブディレクトリを作ってもOK
-  - 例: `examples/phase-01/`, `src/phase-01/`
+- AIが出す参照コード: `examples/backend/`, `examples/frontend/`
+- 自分で写経するコード: `backend/`, `frontend/`
+- フェーズごとの分割は行わない
 
 ---
 
