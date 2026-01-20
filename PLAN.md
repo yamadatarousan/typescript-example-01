@@ -146,6 +146,14 @@ UIを作って実際に操作できるようにする
 - [ ] TODO一覧/追加/編集/削除
 - [ ] 認証トークン付きでのAPI呼び出し
 
+#### 認証API仕様（確定）
+- エンドポイント: `POST /auth/signup`, `POST /auth/login`
+- レスポンス: `{ token, user: { id, email } }`
+- バリデーション: emailは `email` 形式、passwordは `min 8`
+- エラー: 400（Invalid body）、401（Invalid credentials）、409（Email already registered）
+- JWT期限: `7d`
+- `/todos` は `Authorization: Bearer <token>` 必須
+
 #### 学ぶこと
 - Reactコンポーネント
 - 状態管理
