@@ -51,6 +51,61 @@ describe("todos api (db)", () => {
     expect(typeof loginResponse.body.token).toBe("string");
   });
 
+  it("rejects invalid auth attempts", async () => {
+    await request(app.server)
+      .post("/auth/signup")
+      .send({ email: "dup@example.com", password })
+      .expect(201);
+
+    await request(app.server)
+      .post("/auth/signup")
+      .send({ email: "dup@example.com", password })
+      .expect(409);
+
+    await request(app.server)
+      .post("/auth/login")
+      .send({ email: "dup@example.com", password: "wrong-pass" })
+      .expect(401);
+
+    await request(app.server)
+      .post("/auth/login")
+      .send({ email: "missing@example.com", password })
+      .expect(401);
+  });
+
+  it("requires auth for todos", async () => {
+    await request(app.server).get("/todos").expect(401);
+
+    await request(app.server)
+      .post("/todos")
+      .send({ title: "No auth" })
+      .expect(401);
+  });
+
+  it("hides other users' todos", async () => {
+    const tokenA = await signupAndGetToken(app, "owner@example.com");
+    const tokenB = await signupAndGetToken(app, "other@example.com");
+
+    const created = await request(app.server)
+      .post("/todos")
+      .set("Authorization", `Bearer ${tokenA}`)
+      .send({ title: "Owner task" })
+      .expect(201);
+
+    const todoId = created.body.id as number;
+
+    await request(app.server)
+      .put(`/todos/${todoId}`)
+      .set("Authorization", `Bearer ${tokenB}`)
+      .send({ status: "done" })
+      .expect(404);
+
+    await request(app.server)
+      .delete(`/todos/${todoId}`)
+      .set("Authorization", `Bearer ${tokenB}`)
+      .expect(404);
+  });
+
   it("creates and lists todos", async () => {
     const token = await signupAndGetToken(app, "list@example.com");
     const createResponse = await request(app.server)
