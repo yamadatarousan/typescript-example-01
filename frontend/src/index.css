@@ -7,6 +7,9 @@
 :root {
   font-family: "DM Sans", system-ui, -apple-system, sans-serif;
   color-scheme: dark;
+  --ink: #0b0f12;
+  --accent-warm: #f6c46a;
+  --accent-cool: #5dd6c8;
 }
 
 /* デフォルトの余白を外す */
