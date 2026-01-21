@@ -7,9 +7,21 @@
 - バックエンド（参照）は `examples/backend/` に置く（内部の `src/` 構造は維持）
 - フロントエンド（写経）は `frontend/` に置く
 - フロントエンド（参照）は `examples/frontend/` に置く
-- `examples/` 配下に新しくファイルを追加したら、対応する空ファイルを写経側にも作る
 - コメントは日本語で書く
 - 変更ごとに動作確認を行う
+
+---
+
+## ファイル命名/配置のルール
+
+- `examples/` 配下に新しくファイルを追加したら、対応する空ファイルを写経側にも作る
+- typeは「そのファイルだけで使うなら同一ファイル、複数箇所で使うなら `types/` に置く」
+- Reactコンポーネントは `PascalCase.tsx`（例: `TodoApp.tsx`）
+- hooksは `useXxx.ts`（例: `useAuth.ts`）
+- storeは `camelCase.ts`（例: `todoFilter.ts`）
+- typesは `lowercase.ts`（例: `auth.ts`, `todo.ts`）
+- backendのエントリは `index.ts`、HTTPサーバは `server.ts`
+- テストは `*.test.ts` で配置する
 
 ---
 
