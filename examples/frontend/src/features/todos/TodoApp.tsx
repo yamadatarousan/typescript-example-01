@@ -8,6 +8,7 @@ import {
   updateTodoTitle,
 } from "../../api/client";
 import type { Todo } from "../../types/todo";
+import { useAuthStore } from "../../store/auth";
 import { useTodoFilterStore } from "../../store/todoFilter";
 
 // 日付は見やすい形に変換する
@@ -19,6 +20,7 @@ function formatDate(value: string | null | undefined): string {
 export default function TodoApp() {
   // React Queryのキャッシュ操作を行うために取得
   const queryClient = useQueryClient();
+  const { user, clearAuth } = useAuthStore();
   // フォーム入力のローカル状態
   const [title, setTitle] = useState("");
   // 表示フィルタはZustandで共有する
@@ -86,12 +88,28 @@ export default function TodoApp() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-6 py-12">
-        <header className="flex flex-col gap-3">
-          <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Phase 5</p>
-          <h1 className="text-4xl font-semibold">TODO Frontend</h1>
-          <p className="text-slate-400">
-            React + Vite + TanStack Query + Zustand でAPI連携する。
-          </p>
+        <header className="flex flex-col gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-col gap-3">
+              <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Phase 5</p>
+              <h1 className="text-4xl font-semibold">TODO Frontend</h1>
+              <p className="text-slate-400">
+                React + Vite + TanStack Query + Zustand でAPI連携する。
+              </p>
+            </div>
+            {user && (
+              <div className="flex items-center gap-3 rounded-full border border-slate-800 bg-slate-900/60 px-4 py-2 text-sm text-slate-300">
+                <span className="text-xs uppercase tracking-[0.2em] text-slate-500">Signed in</span>
+                <span className="font-medium text-slate-100">{user.email}</span>
+                <button
+                  onClick={clearAuth}
+                  className="rounded-full border border-slate-700 px-3 py-1 text-xs text-slate-200 hover:border-cyan-400"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         </header>
 
         <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6 shadow-xl shadow-black/30">
