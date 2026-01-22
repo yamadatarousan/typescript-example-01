@@ -2,7 +2,7 @@ import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import { parseTodoStatus } from "../domain/valueObjects/todoStatus";
 import { TodoTitle } from "../domain/valueObjects/todoTitle";
-import { TodoServiceError } from "../services/todoService";
+import { DomainError, domainErrorCodes } from "../domain/errors/domainError";
 import { buildCreateTodo } from "../usecases/todos/createTodo";
 import { buildDeleteTodo } from "../usecases/todos/deleteTodo";
 import { buildListTodos } from "../usecases/todos/listTodos";
@@ -104,9 +104,18 @@ export function registerTodoHandlers(app: FastifyInstance, requireAuth: AuthGuar
         });
         return reply.send(todo);
       } catch (error) {
-        if (error instanceof TodoServiceError) {
-          const response: ApiError = { message: error.message };
-          return reply.code(404).send(response);
+        if (error instanceof DomainError) {
+          if (error.code === domainErrorCodes.todoNotFound) {
+            const response: ApiError = { message: error.message };
+            return reply.code(404).send(response);
+          }
+          if (
+            error.code === domainErrorCodes.invalidTodoTitle ||
+            error.code === domainErrorCodes.invalidTodoStatus
+          ) {
+            const response: ApiError = { message: error.message };
+            return reply.code(400).send(response);
+          }
         }
         const response: ApiError = { message: "Unexpected error." };
         return reply.code(500).send(response);
@@ -134,9 +143,11 @@ export function registerTodoHandlers(app: FastifyInstance, requireAuth: AuthGuar
         await deleteTodoUseCase({ id, userId });
         return reply.code(204).send();
       } catch (error) {
-        if (error instanceof TodoServiceError) {
-          const response: ApiError = { message: error.message };
-          return reply.code(404).send(response);
+        if (error instanceof DomainError) {
+          if (error.code === domainErrorCodes.todoNotFound) {
+            const response: ApiError = { message: error.message };
+            return reply.code(404).send(response);
+          }
         }
         const response: ApiError = { message: "Unexpected error." };
         return reply.code(500).send(response);

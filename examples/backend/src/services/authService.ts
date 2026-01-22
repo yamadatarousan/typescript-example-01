@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { randomBytes, scryptSync, timingSafeEqual } from "crypto";
+import { DomainError, domainErrorCodes } from "../domain/errors/domainError";
 import { createUser, findUserByEmail } from "../repositories/userRepository";
 
 export type AuthUser = {
@@ -11,15 +12,6 @@ export type AuthResult = {
   token: string;
   user: AuthUser;
 };
-
-export class AuthServiceError extends Error {
-  readonly code: "EMAIL_EXISTS" | "INVALID_CREDENTIALS";
-
-  constructor(message: string, code: "EMAIL_EXISTS" | "INVALID_CREDENTIALS") {
-    super(message);
-    this.code = code;
-  }
-}
 
 function hashPassword(password: string, salt: string): string {
   return scryptSync(password, salt, 64).toString("hex");
@@ -50,7 +42,7 @@ export async function signUp(
 ): Promise<AuthResult> {
   const existing = await findUserByEmail(email);
   if (existing) {
-    throw new AuthServiceError("Email already registered.", "EMAIL_EXISTS");
+    throw new DomainError("Email already registered.", domainErrorCodes.emailExists);
   }
 
   const { hash, salt } = createPasswordHash(password);
@@ -71,12 +63,12 @@ export async function login(
 ): Promise<AuthResult> {
   const user = await findUserByEmail(email);
   if (!user) {
-    throw new AuthServiceError("Invalid credentials.", "INVALID_CREDENTIALS");
+    throw new DomainError("Invalid credentials.", domainErrorCodes.invalidCredentials);
   }
 
   const valid = verifyPassword(password, user.passwordSalt, user.passwordHash);
   if (!valid) {
-    throw new AuthServiceError("Invalid credentials.", "INVALID_CREDENTIALS");
+    throw new DomainError("Invalid credentials.", domainErrorCodes.invalidCredentials);
   }
 
   const authUser = { id: user.id, email: user.email };

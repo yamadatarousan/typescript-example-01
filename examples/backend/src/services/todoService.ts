@@ -1,4 +1,5 @@
 import type { Todo } from "@prisma/client";
+import { DomainError, domainErrorCodes } from "../domain/errors/domainError";
 import {
   createTodo,
   deleteTodo,
@@ -6,15 +7,6 @@ import {
   listTodosByUserId,
   updateTodo,
 } from "../repositories/todoRepository";
-
-export class TodoServiceError extends Error {
-  readonly code: "TODO_NOT_FOUND";
-
-  constructor(message: string) {
-    super(message);
-    this.code = "TODO_NOT_FOUND";
-  }
-}
 
 export async function listTodos(userId: number): Promise<Todo[]> {
   return listTodosByUserId(userId);
@@ -31,7 +23,7 @@ export async function updateTodoForUser(
 ): Promise<Todo> {
   const target = await findTodoByIdForUser(id, userId);
   if (!target) {
-    throw new TodoServiceError("Todo not found.");
+    throw new DomainError("Todo not found.", domainErrorCodes.todoNotFound);
   }
 
   return updateTodo(id, data);
@@ -40,7 +32,7 @@ export async function updateTodoForUser(
 export async function deleteTodoForUser(id: number, userId: number): Promise<void> {
   const target = await findTodoByIdForUser(id, userId);
   if (!target) {
-    throw new TodoServiceError("Todo not found.");
+    throw new DomainError("Todo not found.", domainErrorCodes.todoNotFound);
   }
 
   await deleteTodo(id);

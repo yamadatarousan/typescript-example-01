@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
+import { DomainError, domainErrorCodes } from "../domain/errors/domainError";
 import { Email } from "../domain/valueObjects/email";
-import { AuthServiceError } from "../services/authService";
 import { buildLoginUser } from "../usecases/auth/loginUser";
 import { buildSignUpUser } from "../usecases/auth/signUpUser";
 
@@ -32,9 +32,15 @@ export function registerAuthHandlers(app: FastifyInstance, jwtSecret: string) {
       });
       return reply.code(201).send(result);
     } catch (error) {
-      if (error instanceof AuthServiceError && error.code === "EMAIL_EXISTS") {
-        const response: ApiError = { message: error.message };
-        return reply.code(409).send(response);
+      if (error instanceof DomainError) {
+        if (error.code === domainErrorCodes.emailExists) {
+          const response: ApiError = { message: error.message };
+          return reply.code(409).send(response);
+        }
+        if (error.code === domainErrorCodes.invalidEmail) {
+          const response: ApiError = { message: error.message };
+          return reply.code(400).send(response);
+        }
       }
       const response: ApiError = { message: "Unexpected error." };
       return reply.code(500).send(response);
@@ -55,9 +61,15 @@ export function registerAuthHandlers(app: FastifyInstance, jwtSecret: string) {
       });
       return reply.send(result);
     } catch (error) {
-      if (error instanceof AuthServiceError && error.code === "INVALID_CREDENTIALS") {
-        const response: ApiError = { message: error.message };
-        return reply.code(401).send(response);
+      if (error instanceof DomainError) {
+        if (error.code === domainErrorCodes.invalidCredentials) {
+          const response: ApiError = { message: error.message };
+          return reply.code(401).send(response);
+        }
+        if (error.code === domainErrorCodes.invalidEmail) {
+          const response: ApiError = { message: error.message };
+          return reply.code(400).send(response);
+        }
       }
       const response: ApiError = { message: "Unexpected error." };
       return reply.code(500).send(response);
