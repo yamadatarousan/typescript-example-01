@@ -1,6 +1,9 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { AuthServiceError, login, signUp } from "../services/authService";
+import { Email } from "../domain/valueObjects/email";
+import { AuthServiceError } from "../services/authService";
+import { buildLoginUser } from "../usecases/auth/loginUser";
+import { buildSignUpUser } from "../usecases/auth/signUpUser";
 
 type ApiError = {
   message: string;
@@ -12,6 +15,9 @@ const authSchema = z.object({
 });
 
 export function registerAuthHandlers(app: FastifyInstance, jwtSecret: string) {
+  const signUpUser = buildSignUpUser(jwtSecret);
+  const loginUser = buildLoginUser(jwtSecret);
+
   app.post("/auth/signup", async (request, reply) => {
     const parsed = authSchema.safeParse(request.body);
     if (!parsed.success) {
@@ -20,7 +26,10 @@ export function registerAuthHandlers(app: FastifyInstance, jwtSecret: string) {
     }
 
     try {
-      const result = await signUp(parsed.data.email, parsed.data.password, jwtSecret);
+      const result = await signUpUser({
+        email: Email.create(parsed.data.email),
+        password: parsed.data.password,
+      });
       return reply.code(201).send(result);
     } catch (error) {
       if (error instanceof AuthServiceError && error.code === "EMAIL_EXISTS") {
@@ -40,7 +49,10 @@ export function registerAuthHandlers(app: FastifyInstance, jwtSecret: string) {
     }
 
     try {
-      const result = await login(parsed.data.email, parsed.data.password, jwtSecret);
+      const result = await loginUser({
+        email: Email.create(parsed.data.email),
+        password: parsed.data.password,
+      });
       return reply.send(result);
     } catch (error) {
       if (error instanceof AuthServiceError && error.code === "INVALID_CREDENTIALS") {

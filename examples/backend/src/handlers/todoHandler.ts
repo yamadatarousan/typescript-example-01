@@ -1,12 +1,12 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import {
-  createNewTodo,
-  deleteTodoForUser,
-  listTodos,
-  TodoServiceError,
-  updateTodoForUser,
-} from "../services/todoService";
+import { parseTodoStatus } from "../domain/valueObjects/todoStatus";
+import { TodoTitle } from "../domain/valueObjects/todoTitle";
+import { TodoServiceError } from "../services/todoService";
+import { buildCreateTodo } from "../usecases/todos/createTodo";
+import { buildDeleteTodo } from "../usecases/todos/deleteTodo";
+import { buildListTodos } from "../usecases/todos/listTodos";
+import { buildUpdateTodo } from "../usecases/todos/updateTodo";
 
 type ApiError = {
   message: string;
@@ -35,6 +35,11 @@ function parseId(input: string): number | null {
 type AuthGuard = (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
 
 export function registerTodoHandlers(app: FastifyInstance, requireAuth: AuthGuard) {
+  const listTodosUseCase = buildListTodos();
+  const createTodoUseCase = buildCreateTodo();
+  const updateTodoUseCase = buildUpdateTodo();
+  const deleteTodoUseCase = buildDeleteTodo();
+
   app.get("/todos", { preHandler: requireAuth }, async (request, reply) => {
     const userId = request.user?.id;
     if (!userId) {
@@ -42,7 +47,7 @@ export function registerTodoHandlers(app: FastifyInstance, requireAuth: AuthGuar
       return reply.code(401).send(error);
     }
 
-    const items = await listTodos(userId);
+    const items = await listTodosUseCase({ userId });
     return { items };
   });
 
@@ -59,7 +64,10 @@ export function registerTodoHandlers(app: FastifyInstance, requireAuth: AuthGuar
       return reply.code(401).send(error);
     }
 
-    const todo = await createNewTodo(userId, parsed.data.title);
+    const todo = await createTodoUseCase({
+      userId,
+      title: TodoTitle.create(parsed.data.title),
+    });
     return reply.code(201).send(todo);
   });
 
@@ -87,19 +95,13 @@ export function registerTodoHandlers(app: FastifyInstance, requireAuth: AuthGuar
         return reply.code(401).send(error);
       }
 
-      const data: { title?: string; status?: string; doneAt?: Date | null } = {};
-
-      if (parsed.data.title) {
-        data.title = parsed.data.title;
-      }
-
-      if (parsed.data.status) {
-        data.status = parsed.data.status;
-        data.doneAt = parsed.data.status === "done" ? new Date() : null;
-      }
-
       try {
-        const todo = await updateTodoForUser(id, userId, data);
+        const todo = await updateTodoUseCase({
+          id,
+          userId,
+          title: parsed.data.title ? TodoTitle.create(parsed.data.title) : undefined,
+          status: parsed.data.status ? parseTodoStatus(parsed.data.status) : undefined,
+        });
         return reply.send(todo);
       } catch (error) {
         if (error instanceof TodoServiceError) {
@@ -129,7 +131,7 @@ export function registerTodoHandlers(app: FastifyInstance, requireAuth: AuthGuar
       }
 
       try {
-        await deleteTodoForUser(id, userId);
+        await deleteTodoUseCase({ id, userId });
         return reply.code(204).send();
       } catch (error) {
         if (error instanceof TodoServiceError) {
