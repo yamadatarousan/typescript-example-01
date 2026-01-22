@@ -191,6 +191,11 @@ server.tsの責務を分離し、Domain設計で理解を深める
 - [ ] 例外/エラーの責務分離
 - [ ] Domainエラー（ビジネスルール違反）を定義する
 
+#### Domain設計案
+- Entity: User, Todo
+- ValueObject: Email, TodoTitle, TodoStatus
+- UseCase: SignUpUser, LoginUser, CreateTodo, ListTodos, UpdateTodo, DeleteTodo
+
 #### 成果物
 - Domain込みのレイヤード構成に整理されたAPI実装
 
