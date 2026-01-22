@@ -189,6 +189,7 @@ server.tsの責務を分離し、Domain設計で理解を深める
 - [ ] Domain（Entity / ValueObject / UseCase）を追加
 - [ ] 依存の向きを整理（Handler -> UseCase -> Service -> Repository）
 - [ ] 例外/エラーの責務分離
+- [ ] Domainエラー（ビジネスルール違反）を定義する
 
 #### 成果物
 - Domain込みのレイヤード構成に整理されたAPI実装
