@@ -184,6 +184,12 @@ UIを作って実際に操作できるようにする
 #### 目標
 server.tsの責務を分離し、Domain設計で理解を深める
 
+#### レイヤードの役割
+- Handler: HTTPの入出力とバリデーションを担当し、UseCaseを呼ぶ
+- UseCase: アプリの操作単位（ユーザーの行為）を表し、Serviceを組み合わせる
+- Service: ビジネスロジックや外部連携の実装を担当する
+- Repository: 永続化の具体実装を担当する
+
 #### 実装内容
 - [ ] Domain（Entity / ValueObject / UseCase）を定義する
 - [ ] Handler/Service/Repositoryに分割
