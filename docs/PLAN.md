@@ -185,8 +185,8 @@ UIを作って実際に操作できるようにする
 server.tsの責務を分離し、Domain設計で理解を深める
 
 #### 実装内容
+- [ ] Domain（Entity / ValueObject / UseCase）を定義する
 - [ ] Handler/Service/Repositoryに分割
-- [ ] Domain（Entity / ValueObject / UseCase）を追加
 - [ ] 依存の向きを整理（Handler -> UseCase -> Service -> Repository）
 - [ ] 例外/エラーの責務分離
 - [ ] Domainエラー（ビジネスルール違反）を定義する
