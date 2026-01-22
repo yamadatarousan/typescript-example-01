@@ -196,6 +196,43 @@ server.tsの責務を分離し、Domain設計で理解を深める
 - ValueObject: Email, TodoTitle, TodoStatus
 - UseCase: SignUpUser, LoginUser, CreateTodo, ListTodos, UpdateTodo, DeleteTodo
 
+#### ディレクトリ構成案
+```
+backend/src/
+  handlers/
+    authHandler.ts
+    todoHandler.ts
+  usecases/
+    auth/
+      signUpUser.ts
+      loginUser.ts
+    todos/
+      createTodo.ts
+      listTodos.ts
+      updateTodo.ts
+      deleteTodo.ts
+  domain/
+    entities/
+      user.ts
+      todo.ts
+    valueObjects/
+      email.ts
+      todoTitle.ts
+      todoStatus.ts
+    errors/
+      domainError.ts
+  services/
+    authService.ts
+    todoService.ts
+  repositories/
+    userRepository.ts
+    todoRepository.ts
+  infrastructure/
+    prismaClient.ts
+  server.ts
+  index.ts
+```
+
 #### 成果物
 - Domain込みのレイヤード構成に整理されたAPI実装
 
