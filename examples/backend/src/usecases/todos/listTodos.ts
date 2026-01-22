@@ -1,5 +1,5 @@
-import type { TodoStatus } from "../../domain/valueObjects/todoStatus";
-import { listTodos } from "../../services/todoService";
+import type { TodoStatus } from "../../domain/valueObjects/todoStatus.js";
+import { listTodos } from "../../services/todoService.js";
 
 export type ListTodosInput = {
   userId: number;

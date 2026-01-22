@@ -1,6 +1,6 @@
-import type { TodoStatus } from "../../domain/valueObjects/todoStatus";
-import type { TodoTitle } from "../../domain/valueObjects/todoTitle";
-import { updateTodoForUser } from "../../services/todoService";
+import type { TodoStatus } from "../../domain/valueObjects/todoStatus.js";
+import type { TodoTitle } from "../../domain/valueObjects/todoTitle.js";
+import { updateTodoForUser } from "../../services/todoService.js";
 
 export type UpdateTodoInput = {
   id: number;

@@ -1,5 +1,5 @@
-import type { Email } from "../../domain/valueObjects/email";
-import { signUp } from "../../services/authService";
+import type { Email } from "../../domain/valueObjects/email.js";
+import { signUp } from "../../services/authService.js";
 
 export type SignUpUserInput = {
   email: Email;

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { randomBytes, scryptSync, timingSafeEqual } from "crypto";
-import { DomainError, domainErrorCodes } from "../domain/errors/domainError";
-import { createUser, findUserByEmail } from "../repositories/userRepository";
+import { DomainError, domainErrorCodes } from "../domain/errors/domainError.js";
+import { createUser, findUserByEmail } from "../repositories/userRepository.js";
 
 export type AuthUser = {
   id: number;

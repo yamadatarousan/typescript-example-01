@@ -1,5 +1,5 @@
 import type { Prisma, Todo } from "@prisma/client";
-import { prisma } from "../infrastructure/prismaClient";
+import { prisma } from "../infrastructure/prismaClient.js";
 
 export async function listTodosByUserId(userId: number): Promise<Todo[]> {
   return prisma.todo.findMany({ where: { userId }, orderBy: { id: "asc" } });

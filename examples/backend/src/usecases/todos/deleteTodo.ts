@@ -1,4 +1,4 @@
-import { deleteTodoForUser } from "../../services/todoService";
+import { deleteTodoForUser } from "../../services/todoService.js";
 
 export type DeleteTodoInput = {
   id: number;

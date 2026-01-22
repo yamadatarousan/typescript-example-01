@@ -1,9 +1,9 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { DomainError, domainErrorCodes } from "../domain/errors/domainError";
-import { Email } from "../domain/valueObjects/email";
-import { buildLoginUser } from "../usecases/auth/loginUser";
-import { buildSignUpUser } from "../usecases/auth/signUpUser";
+import { DomainError, domainErrorCodes } from "../domain/errors/domainError.js";
+import { Email } from "../domain/valueObjects/email.js";
+import { buildLoginUser } from "../usecases/auth/loginUser.js";
+import { buildSignUpUser } from "../usecases/auth/signUpUser.js";
 
 type ApiError = {
   message: string;

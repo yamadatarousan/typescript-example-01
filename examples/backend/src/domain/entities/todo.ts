@@ -1,5 +1,5 @@
-import { TodoTitle } from "../valueObjects/todoTitle";
-import type { TodoStatus } from "../valueObjects/todoStatus";
+import { TodoTitle } from "../valueObjects/todoTitle.js";
+import type { TodoStatus } from "../valueObjects/todoStatus.js";
 
 type TodoProps = {
   id: number;

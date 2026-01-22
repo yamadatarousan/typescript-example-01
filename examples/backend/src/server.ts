@@ -1,9 +1,9 @@
 import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import cors from "@fastify/cors";
 import jwt from "jsonwebtoken";
-import { registerAuthHandlers } from "./handlers/authHandler";
-import { registerTodoHandlers } from "./handlers/todoHandler";
-import { disconnectPrisma } from "./infrastructure/prismaClient";
+import { registerAuthHandlers } from "./handlers/authHandler.js";
+import { registerTodoHandlers } from "./handlers/todoHandler.js";
+import { disconnectPrisma } from "./infrastructure/prismaClient.js";
 
 type ApiError = {
   message: string;

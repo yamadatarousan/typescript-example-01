@@ -1,12 +1,12 @@
 import type { Todo } from "@prisma/client";
-import { DomainError, domainErrorCodes } from "../domain/errors/domainError";
+import { DomainError, domainErrorCodes } from "../domain/errors/domainError.js";
 import {
   createTodo,
   deleteTodo,
   findTodoByIdForUser,
   listTodosByUserId,
   updateTodo,
-} from "../repositories/todoRepository";
+} from "../repositories/todoRepository.js";
 
 export async function listTodos(userId: number): Promise<Todo[]> {
   return listTodosByUserId(userId);

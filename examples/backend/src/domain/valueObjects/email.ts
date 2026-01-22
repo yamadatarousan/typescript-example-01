@@ -1,4 +1,4 @@
-import { DomainError, domainErrorCodes } from "../errors/domainError";
+import { DomainError, domainErrorCodes } from "../errors/domainError.js";
 
 export class Email {
   private constructor(readonly value: string) {}

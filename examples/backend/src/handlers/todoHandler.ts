@@ -1,12 +1,12 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { parseTodoStatus } from "../domain/valueObjects/todoStatus";
-import { TodoTitle } from "../domain/valueObjects/todoTitle";
-import { DomainError, domainErrorCodes } from "../domain/errors/domainError";
-import { buildCreateTodo } from "../usecases/todos/createTodo";
-import { buildDeleteTodo } from "../usecases/todos/deleteTodo";
-import { buildListTodos } from "../usecases/todos/listTodos";
-import { buildUpdateTodo } from "../usecases/todos/updateTodo";
+import { parseTodoStatus } from "../domain/valueObjects/todoStatus.js";
+import { TodoTitle } from "../domain/valueObjects/todoTitle.js";
+import { DomainError, domainErrorCodes } from "../domain/errors/domainError.js";
+import { buildCreateTodo } from "../usecases/todos/createTodo.js";
+import { buildDeleteTodo } from "../usecases/todos/deleteTodo.js";
+import { buildListTodos } from "../usecases/todos/listTodos.js";
+import { buildUpdateTodo } from "../usecases/todos/updateTodo.js";
 
 type ApiError = {
   message: string;
