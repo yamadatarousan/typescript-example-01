@@ -190,8 +190,12 @@ server.tsの責務を分離し、Domain設計で理解を深める
 - Service: ビジネスロジックや外部連携の実装を担当する
 - Repository: 永続化の具体実装を担当する
 
+#### Domainの役割
+- Entity: IDで同一性を持つモデル。状態と振る舞い（ルール）を持つ
+- ValueObject: 値に意味と制約を持つ不変オブジェクト。値が同じなら同じと扱う
+
 #### 実装内容
-- [ ] Domain（Entity / ValueObject / UseCase）を定義する
+- [ ] Domain（Entity / ValueObject）を定義する
 - [ ] Handler/Service/Repositoryに分割
 - [ ] 依存の向きを整理（Handler -> UseCase -> Service -> Repository）
 - [ ] 例外/エラーの責務分離
@@ -200,7 +204,14 @@ server.tsの責務を分離し、Domain設計で理解を深める
 #### Domain設計案
 - Entity: User, Todo
 - ValueObject: Email, TodoTitle, TodoStatus
-- UseCase: SignUpUser, LoginUser, CreateTodo, ListTodos, UpdateTodo, DeleteTodo
+
+#### UseCase設計案（アプリケーション層）
+- SignUpUser
+- LoginUser
+- CreateTodo
+- ListTodos
+- UpdateTodo
+- DeleteTodo
 
 #### ディレクトリ構成案
 ```
