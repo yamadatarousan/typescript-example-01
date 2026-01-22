@@ -182,15 +182,16 @@ UIを作って実際に操作できるようにする
 ### Phase 6: レイヤード整理（Week 9）
 
 #### 目標
-server.tsの責務を分離して学習しやすい構成にする
+server.tsの責務を分離し、Domain設計で理解を深める
 
 #### 実装内容
 - [ ] Handler/Service/Repositoryに分割
-- [ ] 依存の向きを整理（Handler -> Service -> Repository）
+- [ ] Domain（Entity / ValueObject / UseCase）を追加
+- [ ] 依存の向きを整理（Handler -> UseCase -> Service -> Repository）
 - [ ] 例外/エラーの責務分離
 
 #### 成果物
-- レイヤード構成に整理されたAPI実装
+- Domain込みのレイヤード構成に整理されたAPI実装
 
 ---
 
