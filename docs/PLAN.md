@@ -211,11 +211,11 @@ server.tsの責務を分離し、Domain設計で理解を深める
 - ValueObject: 値に意味と制約を持つ不変オブジェクト。値が同じなら同じと扱う
 
 #### 実装内容
-- [ ] Domain（Entity / ValueObject）を定義する
-- [ ] Handler/Service/Repositoryに分割
-- [ ] 依存の向きを整理（Handler -> UseCase -> Service -> Repository）
-- [ ] 例外/エラーの責務分離
-- [ ] Domainエラー（ビジネスルール違反）を定義する
+- [X] Domain（Entity / ValueObject）を定義する
+- [X] Handler/Service/Repositoryに分割
+- [X] 依存の向きを整理（Handler -> UseCase -> Service -> Repository）
+- [X] 例外/エラーの責務分離
+- [X] Domainエラー（ビジネスルール違反）を定義する
 
 #### Domain設計案
 - Entity: User, Todo
