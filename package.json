@@ -34,6 +34,7 @@
     "dotenv-cli": "^7.4.3",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.1.0",
     "prisma": "^5.22.0",
     "supertest": "^7.0.0",
     "tsx": "^4.16.2",
