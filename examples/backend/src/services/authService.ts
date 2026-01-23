@@ -42,7 +42,10 @@ export async function signUp(
 ): Promise<AuthResult> {
   const existing = await findUserByEmail(email);
   if (existing) {
-    throw new DomainError("Email already registered.", domainErrorCodes.emailExists);
+    throw new DomainError(
+      "Email already registered.",
+      domainErrorCodes.emailExists,
+    );
   }
 
   const { hash, salt } = createPasswordHash(password);
@@ -63,12 +66,18 @@ export async function login(
 ): Promise<AuthResult> {
   const user = await findUserByEmail(email);
   if (!user) {
-    throw new DomainError("Invalid credentials.", domainErrorCodes.invalidCredentials);
+    throw new DomainError(
+      "Invalid credentials.",
+      domainErrorCodes.invalidCredentials,
+    );
   }
 
   const valid = verifyPassword(password, user.passwordSalt, user.passwordHash);
   if (!valid) {
-    throw new DomainError("Invalid credentials.", domainErrorCodes.invalidCredentials);
+    throw new DomainError(
+      "Invalid credentials.",
+      domainErrorCodes.invalidCredentials,
+    );
   }
 
   const authUser = { id: user.id, email: user.email };

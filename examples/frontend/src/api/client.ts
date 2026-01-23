@@ -77,7 +77,10 @@ export async function createTodo(title: string): Promise<Todo> {
   return handleResponse<Todo>(response);
 }
 
-export async function updateTodoStatus(id: number, status: TodoStatus): Promise<Todo> {
+export async function updateTodoStatus(
+  id: number,
+  status: TodoStatus,
+): Promise<Todo> {
   // ステータス更新
   const response = await fetch(`${API_BASE}/todos/${id}`, {
     method: "PUT",
@@ -88,7 +91,10 @@ export async function updateTodoStatus(id: number, status: TodoStatus): Promise<
   return handleResponse<Todo>(response);
 }
 
-export async function updateTodoTitle(id: number, title: string): Promise<Todo> {
+export async function updateTodoTitle(
+  id: number,
+  title: string,
+): Promise<Todo> {
   // タイトル更新
   const response = await fetch(`${API_BASE}/todos/${id}`, {
     method: "PUT",

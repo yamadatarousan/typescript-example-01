@@ -6,7 +6,10 @@ export class TodoTitle {
   static create(input: string): TodoTitle {
     const trimmed = input.trim();
     if (!trimmed) {
-      throw new DomainError("Todo title is required.", domainErrorCodes.invalidTodoTitle);
+      throw new DomainError(
+        "Todo title is required.",
+        domainErrorCodes.invalidTodoTitle,
+      );
     }
     return new TodoTitle(trimmed);
   }

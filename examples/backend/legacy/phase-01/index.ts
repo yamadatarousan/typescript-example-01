@@ -18,13 +18,7 @@ type TodoList = {
   items: Todo[];
 };
 
-type Command =
-  | "add"
-  | "list"
-  | "done"
-  | "remove"
-  | "clear"
-  | "help";
+type Command = "add" | "list" | "done" | "remove" | "clear" | "help";
 
 type ParsedArgs = {
   command: Command;
@@ -37,7 +31,11 @@ async function loadTodos(): Promise<TodoList> {
   try {
     const raw = await readFile(dataFilePath, "utf-8");
     const parsed = JSON.parse(raw) as TodoList;
-    if (!parsed || !Array.isArray(parsed.items) || typeof parsed.nextId !== "number") {
+    if (
+      !parsed ||
+      !Array.isArray(parsed.items) ||
+      typeof parsed.nextId !== "number"
+    ) {
       return { ...defaultList };
     }
     return parsed;

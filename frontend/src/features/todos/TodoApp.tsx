@@ -91,7 +91,9 @@ export default function TodoApp() {
         <header className="flex flex-col gap-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-col gap-3">
-              <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Phase 5</p>
+              <p className="text-sm uppercase tracking-[0.3em] text-slate-400">
+                Phase 5
+              </p>
               <h1 className="text-4xl font-semibold">TODO Frontend</h1>
               <p className="text-slate-400">
                 React + Vite + TanStack Query + Zustand でAPI連携する。
@@ -99,7 +101,9 @@ export default function TodoApp() {
             </div>
             {user && (
               <div className="flex items-center gap-3 rounded-full border border-slate-800 bg-slate-900/60 px-4 py-2 text-sm text-slate-300">
-                <span className="text-xs uppercase tracking-[0.2em] text-slate-500">Signed in</span>
+                <span className="text-xs uppercase tracking-[0.2em] text-slate-500">
+                  Signed in
+                </span>
                 <span className="font-medium text-slate-100">{user.email}</span>
                 <button
                   onClick={clearAuth}
@@ -114,7 +118,10 @@ export default function TodoApp() {
 
         <section className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6 shadow-xl shadow-black/30">
           {/* 追加フォームとフィルタ切り替え */}
-          <form className="flex flex-col gap-3 md:flex-row" onSubmit={handleSubmit}>
+          <form
+            className="flex flex-col gap-3 md:flex-row"
+            onSubmit={handleSubmit}
+          >
             <input
               value={title}
               onChange={(event) => setTitle(event.target.value)}
@@ -151,7 +158,9 @@ export default function TodoApp() {
           {/* 状態表示とTodo一覧 */}
           {todosQuery.isLoading && <p className="text-slate-400">Loading...</p>}
           {todosQuery.isError && (
-            <p className="text-red-300">{(todosQuery.error as Error).message}</p>
+            <p className="text-red-300">
+              {(todosQuery.error as Error).message}
+            </p>
           )}
 
           {filteredTodos.map((todo) => (
@@ -161,9 +170,13 @@ export default function TodoApp() {
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 className="text-xl font-semibold text-slate-100">{todo.title}</h2>
+                  <h2 className="text-xl font-semibold text-slate-100">
+                    {todo.title}
+                  </h2>
                   <p className="mt-2 text-sm text-slate-400">
-                    Status: {todo.status} · Created: {formatDate(todo.createdAt)} · Done: {formatDate(todo.doneAt)}
+                    Status: {todo.status} · Created:{" "}
+                    {formatDate(todo.createdAt)} · Done:{" "}
+                    {formatDate(todo.doneAt)}
                   </p>
                 </div>
                 <div className="flex flex-col gap-2">

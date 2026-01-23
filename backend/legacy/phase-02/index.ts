@@ -1,22 +1,22 @@
-import { readFile, writeFile } from "node:fs/promises"
-import { resolve } from "node:path"
+import { readFile, writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
 
-const dataFilePath = resolve("./data/todos.json")
+const dataFilePath = resolve("./data/todos.json");
 
 type TodoStatus = "todo" | "done";
 
 type Todo = {
-    id: number;
-    title: string;
-    status: TodoStatus;
-    createdAt: string;
-    doneAt?: string;
-}
+  id: number;
+  title: string;
+  status: TodoStatus;
+  createdAt: string;
+  doneAt?: string;
+};
 
 type TodoList = {
-    nextId: number;
-    items: Todo[];
-}
+  nextId: number;
+  items: Todo[];
+};
 
 type Command =
   | "add"
@@ -29,34 +29,38 @@ type Command =
   | "help";
 
 type ParseArgs = {
-    command: Command;
-    rest: string[];
-}
+  command: Command;
+  rest: string[];
+};
 
 const defaultList: TodoList = { nextId: 1, items: [] };
 
 async function loadTodos(): Promise<TodoList> {
-    try {
-        const raw = await readFile(dataFilePath, "utf-8")
-        const parsed = JSON.parse(raw) as TodoList;
-        if(!parsed || !Array.isArray(parsed.items) || typeof parsed.nextId !== "number") {
-            return { ...defaultList };
-        }
-        return parsed;
-    } catch {
-        return { ...defaultList };
+  try {
+    const raw = await readFile(dataFilePath, "utf-8");
+    const parsed = JSON.parse(raw) as TodoList;
+    if (
+      !parsed ||
+      !Array.isArray(parsed.items) ||
+      typeof parsed.nextId !== "number"
+    ) {
+      return { ...defaultList };
     }
+    return parsed;
+  } catch {
+    return { ...defaultList };
+  }
 }
 
-async function saveTodos(list:TodoList): Promise<void> {
-    const json = JSON.stringify(list, null, 2);
-    await writeFile(dataFilePath, `${json}\n`, "utf-8");
+async function saveTodos(list: TodoList): Promise<void> {
+  const json = JSON.stringify(list, null, 2);
+  await writeFile(dataFilePath, `${json}\n`, "utf-8");
 }
 
 function parseArgs(argv: string[]): ParseArgs {
-    const [command, ...rest] = argv;
+  const [command, ...rest] = argv;
 
-   if (
+  if (
     command === "add" ||
     command === "list" ||
     command === "done" ||
@@ -69,7 +73,7 @@ function parseArgs(argv: string[]): ParseArgs {
     return { command, rest };
   }
 
-  return { command: "help", rest: [] };   
+  return { command: "help", rest: [] };
 }
 
 function printHelp(): void {
@@ -78,35 +82,35 @@ function printHelp(): void {
   console.log("  npm run dev -- src/phase-02/index.ts list");
   console.log("  npm run dev -- src/phase-02/index.ts done <id>");
   console.log("  npm run dev -- src/phase-02/index.ts toggle <id>");
-    console.log("  npm run dev -- src/phase-02/index.ts edit <id> <title>");
+  console.log("  npm run dev -- src/phase-02/index.ts edit <id> <title>");
   console.log("  npm run dev -- src/phase-02/index.ts remove <id>");
   console.log("  npm run dev -- src/phase-02/index.ts clear");
 }
 
 function formatDate(isoString: string): string {
-  return isoString.slice(0, 10)
+  return isoString.slice(0, 10);
 }
 
 function formatTodo(todo: Todo): string {
-    const status = todo.status === "done" ? "[x]" : "[ ]";
-    const created = formatDate(todo.createdAt)
-    const done = todo.doneAt ? ` done:${formatDate(todo.doneAt)}` : "";
-    return `${status} ${todo.id}: ${todo.title} (created:${created}${done})`;
+  const status = todo.status === "done" ? "[x]" : "[ ]";
+  const created = formatDate(todo.createdAt);
+  const done = todo.doneAt ? ` done:${formatDate(todo.doneAt)}` : "";
+  return `${status} ${todo.id}: ${todo.title} (created:${created}${done})`;
 }
 
 function parseId(input: string | undefined): number | null {
-    if (!input) return null;
-    const id = Number.parseInt(input, 10);
-    return Number.isNaN(id) ? null : id;
+  if (!input) return null;
+  const id = Number.parseInt(input, 10);
+  return Number.isNaN(id) ? null : id;
 }
 
 async function addTodo(rest: string[]): Promise<void> {
-  const title = rest.join(" ").trim()
+  const title = rest.join(" ").trim();
   if (!title) {
     console.log("Title is required.");
     return;
   }
-  
+
   const list = await loadTodos();
   const now = new Date().toISOString();
   const todo: Todo = {
@@ -120,7 +124,7 @@ async function addTodo(rest: string[]): Promise<void> {
   list.nextId += 1;
   await saveTodos(list);
 
-  console.log("Added:", formatTodo(todo));  
+  console.log("Added:", formatTodo(todo));
 }
 
 async function listTodos(): Promise<void> {

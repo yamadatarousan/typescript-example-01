@@ -25,7 +25,8 @@ export default function AuthScreen() {
 
     try {
       const payload = { email: email.trim(), password };
-      const response = mode === "login" ? await login(payload) : await signup(payload);
+      const response =
+        mode === "login" ? await login(payload) : await signup(payload);
       setAuth(response.token, response.user);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Login failed.";
@@ -70,7 +71,9 @@ export default function AuthScreen() {
           <div className="w-full max-w-md rounded-3xl border border-slate-800 bg-slate-950/80 p-8 shadow-2xl shadow-black/40 backdrop-blur">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm uppercase tracking-[0.3em] text-slate-500">Welcome</p>
+                <p className="text-sm uppercase tracking-[0.3em] text-slate-500">
+                  Welcome
+                </p>
                 <h2 className="mt-2 text-2xl font-semibold text-slate-100">
                   {mode === "login" ? "Login" : "Create Account"}
                 </h2>
@@ -129,12 +132,17 @@ export default function AuthScreen() {
                 disabled={isSubmitting}
                 className="mt-2 rounded-2xl bg-amber-300 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-slate-950 transition hover:bg-amber-200 disabled:cursor-not-allowed disabled:opacity-70"
               >
-                {isSubmitting ? "Processing..." : mode === "login" ? "Login" : "Sign up"}
+                {isSubmitting
+                  ? "Processing..."
+                  : mode === "login"
+                    ? "Login"
+                    : "Sign up"}
               </button>
             </form>
 
             <p className="mt-6 text-xs text-slate-500">
-              This is a practice screen. Use any email and an 8+ character password.
+              This is a practice screen. Use any email and an 8+ character
+              password.
             </p>
           </div>
         </section>

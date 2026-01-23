@@ -7,21 +7,21 @@ import { z } from "zod";
 const todoStatus = z.enum(["todo", "done"]);
 
 type Todo = {
-    id: number;
-    title: string;
-    status: z.infer<typeof todoStatus>;
-    createdAt: string;
-    doneAt?: string;
-}
+  id: number;
+  title: string;
+  status: z.infer<typeof todoStatus>;
+  createdAt: string;
+  doneAt?: string;
+};
 
 type TodoList = {
   nextId: number;
   items: Todo[];
-}
+};
 
 type ApiError = {
-    message: string;
-}
+  message: string;
+};
 
 const createTodoSchema = z.object({
   title: z.string().min(1),
@@ -42,88 +42,93 @@ function parseId(input: string): number | null {
 }
 
 export function buildApp(): FastifyInstance {
-    const app = fastify();
+  const app = fastify();
 
-    const list: TodoList = {
-        nextId: 1,
-        items: [],
+  const list: TodoList = {
+    nextId: 1,
+    items: [],
+  };
+
+  app.get("/todos", async () => ({ items: list.items }));
+
+  app.post("/todos", async (request, reply) => {
+    const parsed = createTodoSchema.safeParse(request.body);
+    if (!parsed.success) {
+      const err: ApiError = { message: "Invalid body." };
+      return reply.code(400).send(error);
     }
 
-    app.get("/todos", async () => ({ items: list.items }));
+    const now = new Date().toISOString();
+    const todo: Todo = {
+      id: list.nextId,
+      title: parsed.data.title,
+      status: "todo",
+      createdAt: now,
+    };
 
-    app.post("/todos", async(request, reply) => {
-        const parsed = createTodoSchema.safeParse(request.body)
-        if (!parsed.success) {
-            const err: ApiError = { message: "Invalid body." }
-            return reply.code(400).send(error);
-        }
+    list.items.push(todo);
+    list.nextId += 1;
 
-        const now = new Date().toISOString();
-        const todo: Todo = {
-          id: list.nextId,
-          title: parsed.data.title,
-          status: "todo",
-          createdAt: now,
-        };
+    return reply.code(201).send(todo);
+  });
 
-        list.items.push(todo);
-        list.nextId += 1
+  app.put<{ Params: { id: string } }>("/todos/:id", async (request, reply) => {
+    const id = parseId(request.params.id);
+    if (id === null) {
+      const error: ApiError = { message: "Invalid id." };
+      return reply.code(400).send(error);
+    }
 
-        return reply.code(201).send(todo);
-    })
+    const parsed = updateTodoSchema.safeParse(request.body);
+    if (!parsed.success) {
+      const error: ApiError = {
+        message: parsed.error.issues[0]?.message ?? "Invalid body.",
+      };
+      return reply.code(400).send(error);
+    }
 
-    app.put<{ Params: { id: string } }>("/todos/:id", async(request, reply) => {
-        const id = parseId(request.params.id);
-        if(id === null) {
-            const error: ApiError = { message: "Invalid id." };
-            return reply.code(400).send(error)
-        }
+    const target = list.items.find((todo) => todo.id === id);
+    if (!target) {
+      const error: ApiError = { message: "Todo not found." };
+      return reply.code(404).send(error);
+    }
 
-        const parsed = updateTodoSchema.safeParse(request.body)
-        if(!parsed.success) {
-            const error: ApiError = { message: parsed.error.issues[0]?.message ?? "Invalid body." };
-            return reply.code(400).send(error)
-        }
+    if (parsed.data.title) {
+      target.title = parsed.data.title;
+    }
 
-        const target = list.items.find((todo) => todo.id === id);
-        if (!target) {
-            const error: ApiError = { message: "Todo not found." };
-            return reply.code(404).send(error)
-        }
+    if (parsed.data.status) {
+      target.status = parsed.data.status;
+      if (parsed.data.status === "done") {
+        target.doneAt = new Date().toISOString();
+      } else {
+        delete target.doneAt;
+      }
+    }
 
-        if (parsed.data.title) {
-            target.title = parsed.data.title;
-        }
+    return reply.send(target);
+  });
 
-        if(parsed.data.status) {
-            target.status = parsed.data.status;
-            if(parsed.data.status === "done") {
-                target.doneAt = new Date().toISOString();
-            } else {
-                delete target.doneAt;
-            }
-        }
+  app.delete<{ Params: { id: string } }>(
+    "/todos/:id",
+    async (request, reply) => {
+      const id = parseId(request.params.id);
+      if (id === null) {
+        const error: ApiError = { message: "Invalid id." };
+        return reply.code(400).send(error);
+      }
 
-        return reply.send(target)
-    });
+      const before = list.items.length;
+      list.items = list.items.filter((todo) => todo.id !== id);
 
-    app.delete<{ Params: { id: string } }>("/todos/:id", async(request, reply) => {
-        const id = parseId(request.params.id)
-        if (id === null) {
-            const error: ApiError = { message: "Invalid id." };
-            return reply.code(400).send(error);
-        }
+      if (list.items.length === before) {
+        const error: ApiError = { message: "Todo not found." };
+        return reply.code(404).send(error);
+      }
 
-        const before = list.items.length;
-        list.items = list.items.filter((todo) => todo.id !== id);   
-        
-        if (list.items.length === before) {
-            const error: ApiError = { message: "Todo not found." };
-            return reply.code(404).send(error);
-        }
+      return reply.code(204).send();
+    },
+  );
 
-        return reply.code(204).send();
-    });
-
-    return app;
+  return app;
 }

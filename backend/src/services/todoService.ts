@@ -12,7 +12,10 @@ export async function listTodos(userId: number): Promise<Todo[]> {
   return listTodosByUserId(userId);
 }
 
-export async function createNewTodo(userId: number, title: string): Promise<Todo> {
+export async function createNewTodo(
+  userId: number,
+  title: string,
+): Promise<Todo> {
   return createTodo(userId, title);
 }
 
@@ -29,7 +32,10 @@ export async function updateTodoForUser(
   return updateTodo(id, data);
 }
 
-export async function deleteTodoForUser(id: number, userId: number): Promise<void> {
+export async function deleteTodoForUser(
+  id: number,
+  userId: number,
+): Promise<void> {
   const target = await findTodoByIdForUser(id, userId);
   if (!target) {
     throw new DomainError("Todo not found.", domainErrorCodes.todoNotFound);

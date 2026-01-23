@@ -1,4 +1,8 @@
-import fastify, { type FastifyInstance, type FastifyReply, type FastifyRequest } from "fastify";
+import fastify, {
+  type FastifyInstance,
+  type FastifyReply,
+  type FastifyRequest,
+} from "fastify";
 import cors from "@fastify/cors";
 import jwt from "jsonwebtoken";
 import { registerAuthHandlers } from "./handlers/authHandler.js";

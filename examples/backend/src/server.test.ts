@@ -5,7 +5,10 @@ import { buildApp } from "./server.js";
 
 const password = "password123";
 
-async function signupAndGetToken(app: ReturnType<typeof buildApp>, email: string) {
+async function signupAndGetToken(
+  app: ReturnType<typeof buildApp>,
+  email: string,
+) {
   const response = await request(app.server)
     .post("/auth/signup")
     .send({ email, password })

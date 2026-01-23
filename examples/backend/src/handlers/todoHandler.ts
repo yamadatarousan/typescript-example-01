@@ -32,9 +32,15 @@ function parseId(input: string): number | null {
   return Number.isNaN(id) ? null : id;
 }
 
-type AuthGuard = (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+type AuthGuard = (
+  request: FastifyRequest,
+  reply: FastifyReply,
+) => Promise<void>;
 
-export function registerTodoHandlers(app: FastifyInstance, requireAuth: AuthGuard) {
+export function registerTodoHandlers(
+  app: FastifyInstance,
+  requireAuth: AuthGuard,
+) {
   const listTodosUseCase = buildListTodos();
   const createTodoUseCase = buildCreateTodo();
   const updateTodoUseCase = buildUpdateTodo();
@@ -99,8 +105,12 @@ export function registerTodoHandlers(app: FastifyInstance, requireAuth: AuthGuar
         const todo = await updateTodoUseCase({
           id,
           userId,
-          title: parsed.data.title ? TodoTitle.create(parsed.data.title) : undefined,
-          status: parsed.data.status ? parseTodoStatus(parsed.data.status) : undefined,
+          title: parsed.data.title
+            ? TodoTitle.create(parsed.data.title)
+            : undefined,
+          status: parsed.data.status
+            ? parseTodoStatus(parsed.data.status)
+            : undefined,
         });
         return reply.send(todo);
       } catch (error) {

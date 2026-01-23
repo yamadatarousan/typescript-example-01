@@ -4,10 +4,10 @@ import { create } from "zustand";
 type Filter = "all" | "todo" | "done";
 
 type TodoFilterState = {
-    filter: Filter;
-    // フィルタの更新関数
-    setFilter: (filter: Filter) => void;
-}
+  filter: Filter;
+  // フィルタの更新関数
+  setFilter: (filter: Filter) => void;
+};
 
 // フィルタ状態を共有するストア
 export const useTodoFilterStore = create<TodoFilterState>((set) => ({

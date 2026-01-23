@@ -11,4 +11,4 @@ export type Todo = {
   updatedAt: string;
   // doneAtは未完了の場合null/undefinedになる
   doneAt?: string | null;
-}
+};

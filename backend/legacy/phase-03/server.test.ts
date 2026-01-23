@@ -1,46 +1,46 @@
-import request from "supertest"
-import { describe, it, beforeAll, afterAll, expect } from "vitest"
-import { buildApp } from "./server.js"
+import request from "supertest";
+import { describe, it, beforeAll, afterAll, expect } from "vitest";
+import { buildApp } from "./server.js";
 
 describe("todos api", () => {
-    const app = buildApp();
+  const app = buildApp();
 
-    beforeAll(async () => {
-        await app.ready();
-    });
+  beforeAll(async () => {
+    await app.ready();
+  });
 
-    afterAll(async () => {
-        await app.close();
-    })
+  afterAll(async () => {
+    await app.close();
+  });
 
-    it("creates and lists todos", async () => {
-        const createResponse = await request(app.server)
-            .post("/todos")
-            .send( { title: "Write tests" } )
-            .expect(201);
-        
-        expect(createResponse.body.title).toBe("Write tests");
-        expect(createResponse.body.status).toBe("todo");
+  it("creates and lists todos", async () => {
+    const createResponse = await request(app.server)
+      .post("/todos")
+      .send({ title: "Write tests" })
+      .expect(201);
 
-        const listResponse = await request(app.server).get("/todos").expect(200);
-        expect(listResponse.body.items.length).toBe(1);
-    });
+    expect(createResponse.body.title).toBe("Write tests");
+    expect(createResponse.body.status).toBe("todo");
 
-    it("updates and deletes todos", async () => {
-        const createResponse = await request(app.server)
-            .post("/todos")
-            .send({ title: "Ship" })
-            .expect(201);
-            
-        const todoId = createResponse.body.id as number;
+    const listResponse = await request(app.server).get("/todos").expect(200);
+    expect(listResponse.body.items.length).toBe(1);
+  });
 
-        const updateResponse = await request(app.server)
-            .put(`/todos/${todoId}`)
-            .send({ status: "done" })
-            .expect(200);        
+  it("updates and deletes todos", async () => {
+    const createResponse = await request(app.server)
+      .post("/todos")
+      .send({ title: "Ship" })
+      .expect(201);
 
-        expect(updateResponse.body.status).toBe("done");
+    const todoId = createResponse.body.id as number;
 
-        await request(app.server).delete(`/todos/${todoId}`).expect(204);
-    });
+    const updateResponse = await request(app.server)
+      .put(`/todos/${todoId}`)
+      .send({ status: "done" })
+      .expect(200);
+
+    expect(updateResponse.body.status).toBe("done");
+
+    await request(app.server).delete(`/todos/${todoId}`).expect(204);
+  });
 });

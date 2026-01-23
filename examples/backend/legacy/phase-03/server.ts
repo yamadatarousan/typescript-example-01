@@ -78,7 +78,9 @@ export function buildApp(): FastifyInstance {
 
     const parsed = updateTodoSchema.safeParse(request.body);
     if (!parsed.success) {
-      const error: ApiError = { message: parsed.error.issues[0]?.message ?? "Invalid body." };
+      const error: ApiError = {
+        message: parsed.error.issues[0]?.message ?? "Invalid body.",
+      };
       return reply.code(400).send(error);
     }
 
@@ -104,23 +106,26 @@ export function buildApp(): FastifyInstance {
     return reply.send(target);
   });
 
-  app.delete<{ Params: { id: string } }>("/todos/:id", async (request, reply) => {
-    const id = parseId(request.params.id);
-    if (id === null) {
-      const error: ApiError = { message: "Invalid id." };
-      return reply.code(400).send(error);
-    }
+  app.delete<{ Params: { id: string } }>(
+    "/todos/:id",
+    async (request, reply) => {
+      const id = parseId(request.params.id);
+      if (id === null) {
+        const error: ApiError = { message: "Invalid id." };
+        return reply.code(400).send(error);
+      }
 
-    const before = list.items.length;
-    list.items = list.items.filter((todo) => todo.id !== id);
+      const before = list.items.length;
+      list.items = list.items.filter((todo) => todo.id !== id);
 
-    if (list.items.length === before) {
-      const error: ApiError = { message: "Todo not found." };
-      return reply.code(404).send(error);
-    }
+      if (list.items.length === before) {
+        const error: ApiError = { message: "Todo not found." };
+        return reply.code(404).send(error);
+      }
 
-    return reply.code(204).send();
-  });
+      return reply.code(204).send();
+    },
+  );
 
   return app;
 }
