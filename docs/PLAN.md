@@ -277,9 +277,15 @@ backend/src/
 テスト・CIなど実務的な運用を学ぶ
 
 #### 実装内容
+- [ ] テスト実行の分離を運用化（package.jsonにスクリプト追加）
 - [ ] ユニットテスト
 - [ ] E2Eテスト（Playwright）
 - [ ] CI（GitHub Actions）
+
+#### ユニットテスト範囲
+- Domain（Entity / ValueObject / DomainError）
+- UseCase（入力→出力のルール）
+- Service/Repositoryのテスト戦略（モック/実DB）
 
 #### 成果物
 - 品質管理パイプライン
