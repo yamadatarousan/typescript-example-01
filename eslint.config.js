@@ -8,12 +8,15 @@ export default [
   js.configs.recommended,
   prettier,
   {
-    files: ["**/*.ts"],
+    files: ["**/*.ts", "**/*.tsx"],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
         sourceType: "module",
         ecmaVersion: 2022,
+        ecmaFeatures: {
+          jsx: true,
+        },
       },
       globals: globals.node,
     },
@@ -42,6 +45,7 @@ export default [
     files: ["backend/legacy/**", "examples/backend/legacy/**"],
     rules: {
       "no-undef": "off",
+      "@typescript-eslint/consistent-type-imports": "off",
       "@typescript-eslint/no-unused-vars": "off",
     },
   },
