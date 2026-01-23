@@ -278,17 +278,17 @@ backend/src/
 
 #### 実装内容
 - [ ] テスト実行の分離を運用化（package.jsonにスクリプト追加）
+- [ ] Lint（ESLint）
+- [ ] Format（Prettier）
 - [ ] バックエンド: ユニットテスト
 - [ ] バックエンド: API結合テスト（Vitest + Supertest）
+- [ ] フロントエンド: ユニットテスト
+- [ ] フロントエンド: E2Eテスト（Playwright）
 - [ ] バックエンド: CI（GitHub Actions）
   - typecheck + test + build を実行して「型が通る / テストが通る / ビルドできる」を保証する
   - テストDBを起動してからテストを実行する
-- [ ] フロントエンド: ユニットテスト
-- [ ] フロントエンド: E2Eテスト（Playwright）
 - [ ] フロントエンド: CI（GitHub Actions）
   - typecheck + test + build を実行して「型が通る / テストが通る / ビルドできる」を保証する
-- [ ] Lint（ESLint）
-- [ ] Format（Prettier）
 
 #### ユニットテスト範囲
 - Domain（Entity / ValueObject / DomainError）
