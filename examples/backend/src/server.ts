@@ -1,4 +1,4 @@
-import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import fastify, { type FastifyInstance, type FastifyReply, type FastifyRequest } from "fastify";
 import cors from "@fastify/cors";
 import jwt from "jsonwebtoken";
 import { registerAuthHandlers } from "./handlers/authHandler.js";
@@ -63,7 +63,7 @@ export function buildApp(): FastifyInstance {
       }
 
       request.user = { id: userId, email };
-    } catch (error) {
+    } catch {
       const response: ApiError = { message: "Unauthorized." };
       return reply.code(401).send(response);
     }

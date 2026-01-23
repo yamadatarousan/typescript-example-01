@@ -277,7 +277,7 @@ backend/src/
 テスト・CIなど実務的な運用を学ぶ
 
 #### 実装内容
-- [ ] テスト実行の分離を運用化（package.jsonにスクリプト追加）
+- [X] テスト実行の分離を運用化（package.jsonにスクリプト追加）
 - [ ] Lint（ESLint）
 - [ ] Format（Prettier）
 - [ ] バックエンド: ユニットテスト

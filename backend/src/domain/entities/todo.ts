@@ -1,4 +1,4 @@
-import { TodoTitle } from "../valueObjects/todoTitle.js";
+import type { TodoTitle } from "../valueObjects/todoTitle.js";
 import type { TodoStatus } from "../valueObjects/todoStatus.js";
 
 type TodoProps = {
