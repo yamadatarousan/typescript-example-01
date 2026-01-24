@@ -270,7 +270,7 @@ backend/src/
 - [X] テスト実行の分離を運用化（package.jsonにスクリプト追加）
 - [X] Lint（ESLint）
 - [X] Format（Prettier）
-- [ ] バックエンド: ユニットテスト
+- [X] バックエンド: ユニットテスト
 - [ ] バックエンド: API結合テスト（Vitest + Supertest）
 - [ ] フロントエンド: ユニットテスト
 - [ ] フロントエンド: E2Eテスト（Playwright）
