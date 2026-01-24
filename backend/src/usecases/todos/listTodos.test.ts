@@ -13,7 +13,7 @@ describe("listTodosユースケース", () => {
     listTodosMock.mockReset();
   });
 
-  it("ユーザーのTodo一覧を返却形式に変換する", async () => {
+  it("ユーザーのTodo一覧が取得できる", async () => {
     listTodosMock.mockResolvedValue([
       {
         id: 1,

@@ -14,7 +14,7 @@ describe("updateTodoユースケース", () => {
     updateTodoForUserMock.mockReset();
   });
 
-  it("更新結果を返却形式に変換する", async () => {
+  it("Todoを更新できる", async () => {
     updateTodoForUserMock.mockResolvedValue({
       id: 1,
       title: "Updated",
@@ -45,7 +45,7 @@ describe("updateTodoユースケース", () => {
     });
   });
 
-  it("部分更新を許可する", async () => {
+  it("一部の項目だけ更新できる", async () => {
     updateTodoForUserMock.mockResolvedValue({
       id: 2,
       title: "Keep",

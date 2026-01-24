@@ -13,7 +13,7 @@ describe("deleteTodoユースケース", () => {
     deleteTodoForUserMock.mockReset();
   });
 
-  it("ユーザーのTodoを削除する", async () => {
+  it("指定したTodoを削除できる", async () => {
     deleteTodoForUserMock.mockResolvedValue();
 
     const deleteTodo = buildDeleteTodo();

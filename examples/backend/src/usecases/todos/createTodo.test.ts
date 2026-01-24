@@ -14,7 +14,7 @@ describe("createTodoユースケース", () => {
     createNewTodoMock.mockReset();
   });
 
-  it("ValueObjectから作成し返却形式に変換する", async () => {
+  it("タイトルを正規化してTodoを作成できる", async () => {
     createNewTodoMock.mockResolvedValue({
       id: 1,
       title: "Write tests",
