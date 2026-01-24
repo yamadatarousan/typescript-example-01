@@ -285,7 +285,7 @@ backend/src/
 #### 実装内容
 - [X] テスト実行の分離を運用化（package.jsonにスクリプト追加）
 - [X] Lint（ESLint）
-- [ ] Format（Prettier）
+- [X] Format（Prettier）
 - [ ] バックエンド: ユニットテスト
 - [ ] バックエンド: API結合テスト（Vitest + Supertest）
 - [ ] フロントエンド: ユニットテスト
@@ -312,6 +312,7 @@ backend/src/
 - まず「網羅すべき仕様」を決める（例: /auth/signup は 201 / 409 / 400 を網羅）
 - そのテストがコード上の分岐を通っているかをカバレッジで確認する
 - 未到達の分岐があれば、仕様テストの抜け漏れとして見直す
+- テスト
 
 #### Service/Repositoryのテスト方針
 - Repositoryは「メソッドごとの仕様」を先に書き、仕様が書けるものだけテストする
