@@ -2,8 +2,8 @@ import { describe, it, expect } from "vitest";
 import { Todo } from "./todo.js";
 import { TodoTitle } from "../valueObjects/todoTitle.js";
 
-describe("Todo", () => {
-  it("marks todo as done", () => {
+describe("Todo（エンティティ）", () => {
+  it("完了にする", () => {
     const todo = new Todo({
       id: 1,
       title: TodoTitle.create("Ship"),
@@ -17,7 +17,7 @@ describe("Todo", () => {
     expect(done.doneAt).toBeInstanceOf(Date);
   });
 
-  it("marks done todo back to todo", () => {
+  it("未完了に戻す", () => {
     const todo = new Todo({
       id: 1,
       title: TodoTitle.create("Ship"),

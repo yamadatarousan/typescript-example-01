@@ -7,14 +7,14 @@ vi.mock("../../services/todoService.js", () => ({
   updateTodoForUser: vi.fn(),
 }));
 
-describe("updateTodo usecase", () => {
+describe("updateTodoユースケース", () => {
   const updateTodoForUserMock = vi.mocked(updateTodoForUser);
 
   beforeEach(() => {
     updateTodoForUserMock.mockReset();
   });
 
-  it("updates todo with mapped fields", async () => {
+  it("更新結果を返却形式に変換する", async () => {
     updateTodoForUserMock.mockResolvedValue({
       id: 1,
       title: "Updated",
@@ -45,7 +45,7 @@ describe("updateTodo usecase", () => {
     });
   });
 
-  it("allows partial update", async () => {
+  it("部分更新を許可する", async () => {
     updateTodoForUserMock.mockResolvedValue({
       id: 2,
       title: "Keep",

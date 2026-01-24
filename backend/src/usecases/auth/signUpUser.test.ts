@@ -7,14 +7,14 @@ vi.mock("../../services/authService.js", () => ({
   signUp: vi.fn(),
 }));
 
-describe("signUpUser usecase", () => {
+describe("signUpUserユースケース", () => {
   const signUpMock = vi.mocked(signUp);
 
   beforeEach(() => {
     signUpMock.mockReset();
   });
 
-  it("passes normalized email and password to service", async () => {
+  it("正規化済みのメールとパスワードをサービスへ渡す", async () => {
     signUpMock.mockResolvedValue({
       token: "token",
       user: { id: 1, email: "hello@example.com" },

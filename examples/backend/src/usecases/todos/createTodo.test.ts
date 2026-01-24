@@ -7,14 +7,14 @@ vi.mock("../../services/todoService.js", () => ({
   createNewTodo: vi.fn(),
 }));
 
-describe("createTodo usecase", () => {
+describe("createTodoユースケース", () => {
   const createNewTodoMock = vi.mocked(createNewTodo);
 
   beforeEach(() => {
     createNewTodoMock.mockReset();
   });
 
-  it("creates todo from value object and returns mapped output", async () => {
+  it("ValueObjectから作成し返却形式に変換する", async () => {
     createNewTodoMock.mockResolvedValue({
       id: 1,
       title: "Write tests",

@@ -6,14 +6,14 @@ vi.mock("../../services/todoService.js", () => ({
   deleteTodoForUser: vi.fn(),
 }));
 
-describe("deleteTodo usecase", () => {
+describe("deleteTodoユースケース", () => {
   const deleteTodoForUserMock = vi.mocked(deleteTodoForUser);
 
   beforeEach(() => {
     deleteTodoForUserMock.mockReset();
   });
 
-  it("deletes todo for user", async () => {
+  it("ユーザーのTodoを削除する", async () => {
     deleteTodoForUserMock.mockResolvedValue();
 
     const deleteTodo = buildDeleteTodo();

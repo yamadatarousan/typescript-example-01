@@ -6,14 +6,14 @@ vi.mock("../../services/todoService.js", () => ({
   listTodos: vi.fn(),
 }));
 
-describe("listTodos usecase", () => {
+describe("listTodosユースケース", () => {
   const listTodosMock = vi.mocked(listTodos);
 
   beforeEach(() => {
     listTodosMock.mockReset();
   });
 
-  it("returns todos for user with mapped fields", async () => {
+  it("ユーザーのTodo一覧を返却形式に変換する", async () => {
     listTodosMock.mockResolvedValue([
       {
         id: 1,

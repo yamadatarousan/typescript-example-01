@@ -17,7 +17,7 @@ async function signupAndGetToken(
   return response.body.token as string;
 }
 
-describe("todos api (db)", () => {
+describe("Todo API（DB）", () => {
   const app = buildApp();
   const prisma = new PrismaClient();
 
@@ -36,7 +36,7 @@ describe("todos api (db)", () => {
     await prisma.$disconnect();
   });
 
-  it("signs up and logs in", async () => {
+  it("サインアップとログインができる", async () => {
     const signupResponse = await request(app.server)
       .post("/auth/signup")
       .send({ email: "hello@example.com", password })
@@ -54,7 +54,7 @@ describe("todos api (db)", () => {
     expect(typeof loginResponse.body.token).toBe("string");
   });
 
-  it("rejects invalid auth attempts", async () => {
+  it("不正な認証を拒否する", async () => {
     await request(app.server)
       .post("/auth/signup")
       .send({ email: "dup@example.com", password })
@@ -76,7 +76,7 @@ describe("todos api (db)", () => {
       .expect(401);
   });
 
-  it("requires auth for todos", async () => {
+  it("Todo操作に認証が必要", async () => {
     await request(app.server).get("/todos").expect(401);
 
     await request(app.server)
@@ -85,7 +85,7 @@ describe("todos api (db)", () => {
       .expect(401);
   });
 
-  it("hides other users' todos", async () => {
+  it("他ユーザーのTodoは操作できない", async () => {
     const tokenA = await signupAndGetToken(app, "owner@example.com");
     const tokenB = await signupAndGetToken(app, "other@example.com");
 
@@ -109,7 +109,7 @@ describe("todos api (db)", () => {
       .expect(404);
   });
 
-  it("creates and lists todos", async () => {
+  it("Todoを作成して一覧取得できる", async () => {
     const token = await signupAndGetToken(app, "list@example.com");
     const createResponse = await request(app.server)
       .post("/todos")
@@ -129,7 +129,7 @@ describe("todos api (db)", () => {
     expect(listResponse.body.items.length).toBe(1);
   });
 
-  it("updates and deletes todos", async () => {
+  it("Todoを更新・削除できる", async () => {
     const token = await signupAndGetToken(app, "update@example.com");
     const createResponse = await request(app.server)
       .post("/todos")
