@@ -143,4 +143,114 @@ describe("TodoApp", () => {
     expect(screen.queryByText("Todo A")).not.toBeInTheDocument();
     expect(screen.getByText("Todo B")).toBeInTheDocument();
   });
+
+  it("Todoの完了/未完了を切り替えられる", async () => {
+    // Arrange: todoの1件を返す
+    fetchTodosMock.mockResolvedValue([
+      {
+        id: 1,
+        title: "Toggle",
+        status: "todo",
+        createdAt: "2024-01-01",
+        updatedAt: "2024-01-01",
+        doneAt: null,
+      },
+    ]);
+    const updateStatusMock = vi.mocked(updateTodoStatus);
+    updateStatusMock.mockResolvedValue({
+      id: 1,
+      title: "Toggle",
+      status: "done",
+      createdAt: "2024-01-01",
+      updatedAt: "2024-01-01",
+      doneAt: "2024-01-02",
+    });
+
+    // Act: Doneボタンを押す
+    renderWithClient();
+    const user = userEvent.setup();
+    await user.click(await screen.findByRole("button", { name: "Done" }));
+
+    // Assert: status変更APIが呼ばれる
+    await waitFor(() => {
+      expect(updateStatusMock).toHaveBeenCalledWith(1, "done");
+    });
+  });
+
+  it("Todoのタイトルを編集できる", async () => {
+    // Arrange: todoの1件を返す
+    fetchTodosMock.mockResolvedValue([
+      {
+        id: 2,
+        title: "Edit",
+        status: "todo",
+        createdAt: "2024-01-01",
+        updatedAt: "2024-01-01",
+        doneAt: null,
+      },
+    ]);
+    const updateTitleMock = vi.mocked(updateTodoTitle);
+    updateTitleMock.mockResolvedValue({
+      id: 2,
+      title: "Edited",
+      status: "todo",
+      createdAt: "2024-01-01",
+      updatedAt: "2024-01-01",
+      doneAt: null,
+    });
+    const promptSpy = vi
+      .spyOn(window, "prompt")
+      .mockReturnValue("Edited");
+
+    // Act: Editボタンを押す
+    renderWithClient();
+    const user = userEvent.setup();
+    await user.click(await screen.findByRole("button", { name: "Edit" }));
+
+    // Assert: title変更APIが呼ばれる
+    await waitFor(() => {
+      expect(updateTitleMock).toHaveBeenCalledWith(2, "Edited");
+    });
+
+    promptSpy.mockRestore();
+  });
+
+  it("Todoを削除できる", async () => {
+    // Arrange: todoの1件を返す
+    fetchTodosMock.mockResolvedValue([
+      {
+        id: 3,
+        title: "Delete",
+        status: "todo",
+        createdAt: "2024-01-01",
+        updatedAt: "2024-01-01",
+        doneAt: null,
+      },
+    ]);
+    const deleteMock = vi.mocked(deleteTodo);
+    deleteMock.mockResolvedValue();
+
+    // Act: Removeボタンを押す
+    renderWithClient();
+    const user = userEvent.setup();
+    await user.click(await screen.findByRole("button", { name: "Remove" }));
+
+    // Assert: 削除APIが呼ばれる
+    await waitFor(() => {
+      expect(deleteMock).toHaveBeenCalledWith(3, expect.anything());
+    });
+  });
+
+  it("ログアウトできる", async () => {
+    // Arrange: 空の一覧を返す
+    fetchTodosMock.mockResolvedValue([]);
+
+    // Act: Logoutボタンを押す
+    renderWithClient();
+    const user = userEvent.setup();
+    await user.click(await screen.findByRole("button", { name: "Logout" }));
+
+    // Assert: 認証ストアのクリアが呼ばれる
+    expect(clearAuth).toHaveBeenCalled();
+  });
 });
