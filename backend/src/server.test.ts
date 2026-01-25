@@ -76,6 +76,18 @@ describe("Todo API（DB）", () => {
       .expect(401);
   });
 
+  it("認証の入力バリデーションを拒否する", async () => {
+    await request(app.server)
+      .post("/auth/signup")
+      .send({ email: "invalid-email", password: "short" })
+      .expect(400);
+
+    await request(app.server)
+      .post("/auth/login")
+      .send({ email: "invalid-email", password: "short" })
+      .expect(400);
+  });
+
   it("Todo操作に認証が必要", async () => {
     await request(app.server).get("/todos").expect(401);
 
@@ -83,6 +95,13 @@ describe("Todo API（DB）", () => {
       .post("/todos")
       .send({ title: "No auth" })
       .expect(401);
+
+    await request(app.server)
+      .put("/todos/1")
+      .send({ status: "done" })
+      .expect(401);
+
+    await request(app.server).delete("/todos/1").expect(401);
   });
 
   it("他ユーザーのTodoは操作できない", async () => {
@@ -129,6 +148,15 @@ describe("Todo API（DB）", () => {
     expect(listResponse.body.items.length).toBe(1);
   });
 
+  it("Todo作成の入力バリデーションを拒否する", async () => {
+    const token = await signupAndGetToken(app, "invalid-create@example.com");
+    await request(app.server)
+      .post("/todos")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ title: "" })
+      .expect(400);
+  });
+
   it("Todoを更新・削除できる", async () => {
     const token = await signupAndGetToken(app, "update@example.com");
     const createResponse = await request(app.server)
@@ -157,5 +185,36 @@ describe("Todo API（DB）", () => {
       .set("Authorization", `Bearer ${token}`)
       .expect(200);
     expect(listResponse.body.items.length).toBe(0);
+  });
+
+  it("Todo更新の入力バリデーションを拒否する", async () => {
+    const token = await signupAndGetToken(app, "invalid-update@example.com");
+
+    await request(app.server)
+      .put("/todos/invalid")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ status: "done" })
+      .expect(400);
+
+    await request(app.server)
+      .put("/todos/1")
+      .set("Authorization", `Bearer ${token}`)
+      .send({})
+      .expect(400);
+
+    await request(app.server)
+      .put("/todos/1")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ status: "invalid" })
+      .expect(400);
+  });
+
+  it("Todo削除の不正なIDを拒否する", async () => {
+    const token = await signupAndGetToken(app, "invalid-delete@example.com");
+
+    await request(app.server)
+      .delete("/todos/invalid")
+      .set("Authorization", `Bearer ${token}`)
+      .expect(400);
   });
 });
