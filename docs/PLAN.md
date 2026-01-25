@@ -274,6 +274,8 @@ backend/src/
 - [X] バックエンド: ユニットテスト
 - [X] バックエンド: API結合テスト（Vitest + Supertest）
 - [X] フロントエンド: ユニットテスト
+- [X] バックエンド: カバレッジ
+- [ ] フロントエンド: カバレッジ
 - [ ] フロントエンド: E2Eテスト（Playwright）
 - [ ] バックエンド: CI（GitHub Actions）
   - typecheck + test + build を実行して「型が通る / テストが通る / ビルドできる」を保証する
