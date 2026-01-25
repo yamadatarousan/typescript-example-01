@@ -272,7 +272,7 @@ backend/src/
 - [X] Lint（ESLint）
 - [X] Format（Prettier）
 - [X] バックエンド: ユニットテスト
-- [ ] バックエンド: API結合テスト（Vitest + Supertest）
+- [X] バックエンド: API結合テスト（Vitest + Supertest）
 - [ ] フロントエンド: ユニットテスト
 - [ ] フロントエンド: E2Eテスト（Playwright）
 - [ ] バックエンド: CI（GitHub Actions）
