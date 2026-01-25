@@ -7,3 +7,6 @@ data/todos.json
 # Env
 .env
 .env.test
+
+# Coverage
+coverage/
