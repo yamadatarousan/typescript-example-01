@@ -9,5 +9,15 @@ export default defineConfig({
   test: {
     include: ["backend/src/**/*.test.ts"],
     exclude: ["examples/**", "backend/legacy/**"],
+    coverage: {
+      provider: "v8",
+      include: ["backend/src/**"],
+      exclude: [
+        "**/*.test.ts",
+        "**/legacy/**",
+        "**/examples/**",
+        "**/frontend/**",
+      ],
+    },
   },
 });
