@@ -280,7 +280,7 @@ backend/src/
 - [X] バックエンド: CI（GitHub Actions）
   - typecheck + test + build を実行して「型が通る / テストが通る / ビルドできる」を保証する
   - テストDBを起動してからテストを実行する
-- [ ] フロントエンド: CI（GitHub Actions）
+- [X] フロントエンド: CI（GitHub Actions）
   - typecheck + test + build を実行して「型が通る / テストが通る / ビルドできる」を保証する
 
 #### ユニットテスト範囲
