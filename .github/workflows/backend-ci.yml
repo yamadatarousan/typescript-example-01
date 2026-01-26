@@ -74,9 +74,9 @@ jobs:
       - name: Apply migrations
         run: npx dotenv-cli -e .env.test -- prisma migrate reset --schema backend/prisma/schema.prisma --force
 
-      # 型チェック
+      # バックエンドのみ型チェック
       - name: Typecheck
-        run: npm run check
+        run: npm run check:backend
 
       # ビルド（tscでJSを出力）
       - name: Build backend

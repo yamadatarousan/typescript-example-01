@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "tsx",
     "check": "tsc -p tsconfig.json --noEmit",
+    "check:backend": "tsc -p tsconfig.backend.json --noEmit",
     "test": "vitest",
     "test:backend": "npx dotenv-cli -e .env.test -- vitest run --config vitest.backend.config.ts",
     "test:examples": "npx dotenv-cli -e .env.test -- vitest run --config vitest.examples.config.ts",
