@@ -1,0 +1,75 @@
+name: Frontend CI
+
+on:
+  # frontend/examples/frontend 変更時のみ実行する
+  push:
+    paths:
+      - "frontend/**"
+      - "examples/frontend/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/frontend-ci.yml"
+  # PRでも同じ条件で実行する
+  pull_request:
+    paths:
+      - "frontend/**"
+      - "examples/frontend/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/frontend-ci.yml"
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      # リポジトリを取得
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Node.js環境をセットアップ
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      # examples/frontend の依存関係をインストール
+      - name: Install examples frontend deps
+        working-directory: examples/frontend
+        run: npm ci
+
+      # frontend の依存関係をインストール
+      - name: Install frontend deps
+        working-directory: frontend
+        run: npm ci
+
+      # examples/frontend の型チェック
+      - name: Typecheck examples frontend
+        working-directory: examples/frontend
+        run: npm run check
+
+      # frontend の型チェック
+      - name: Typecheck frontend
+        working-directory: frontend
+        run: npm run check
+
+      # examples/frontend のユニットテスト
+      - name: Test examples frontend
+        working-directory: examples/frontend
+        run: npm run test:run
+
+      # frontend のユニットテスト
+      - name: Test frontend
+        working-directory: frontend
+        run: npm run test:run
+
+      # examples/frontend のビルド
+      - name: Build examples frontend
+        working-directory: examples/frontend
+        run: npm run build
+
+      # frontend のビルド
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
