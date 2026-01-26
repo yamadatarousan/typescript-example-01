@@ -1,0 +1,96 @@
+# バックエンドのテスト・型チェックを自動化するCI
+name: Backend CI
+
+on:
+  # backend/examples/backend 変更時のみ実行する
+  push:
+    paths:
+      - "backend/**"
+      - "examples/backend/**"
+      - "package.json"
+      - "package-lock.json"
+      - "vitest.backend.config.ts"
+      - "vitest.examples.config.ts"
+      - "docker-compose.test.yml"
+      - ".github/workflows/backend-ci.yml"
+  # PRでも同じ条件で実行する
+  pull_request:
+    paths:
+      - "backend/**"
+      - "examples/backend/**"
+      - "package.json"
+      - "package-lock.json"
+      - "vitest.backend.config.ts"
+      - "vitest.examples.config.ts"
+      - "docker-compose.test.yml"
+      - ".github/workflows/backend-ci.yml"
+
+jobs:
+  # バックエンド用の検証ジョブ
+  backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      # リポジトリを取得
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Node.js環境をセットアップ
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      # 依存関係をインストール
+      - name: Install dependencies
+        run: npm ci
+
+      # テスト用の環境変数を用意（CI専用の .env.test を生成）
+      - name: Prepare test env
+        run: |
+          cat <<'ENV' > .env.test
+          DATABASE_URL="postgresql://todo:todo@localhost:5437/todo_app_test?schema=public"
+          JWT_SECRET="ci-secret"
+          ENV
+
+      # テスト用DBを起動
+      - name: Start test DB
+        run: docker compose -f docker-compose.test.yml up -d
+
+      # DBが起動するまで待機
+      - name: Wait for DB
+        run: |
+          for i in {1..30}; do
+            if docker exec typescript-example-01-db-test pg_isready -U todo -d todo_app_test; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "DB did not become ready" >&2
+          exit 1
+
+      # テストDBにマイグレーションを適用
+      - name: Apply migrations
+        run: npx dotenv-cli -e .env.test -- prisma migrate reset --schema backend/prisma/schema.prisma --force
+
+      # 型チェック
+      - name: Typecheck
+        run: npm run check
+
+      # ビルド（tscでJSを出力）
+      - name: Build backend
+        run: npm run build:backend
+
+      # examples/backend のテスト
+      - name: Test examples backend
+        run: npm run test:examples
+
+      # backend のテスト
+      - name: Test backend
+        run: npm run test:backend
+
+      # テストDBを停止（失敗時も必ず実行）
+      - name: Stop test DB
+        if: always()
+        run: docker compose -f docker-compose.test.yml down
