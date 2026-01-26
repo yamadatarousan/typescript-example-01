@@ -24,8 +24,7 @@ describe("authService", () => {
   beforeEach(() => {
     findUserByEmailMock.mockReset();
     createUserMock.mockReset();
-    jwtSignMock.mockReset();
-    jwtSignMock.mockReturnValue("token");
+    jwtSignMock.mockClear();
   });
 
   it("既存ユーザーがいる場合はサインアップを拒否する", async () => {
