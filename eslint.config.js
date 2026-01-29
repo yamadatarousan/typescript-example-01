@@ -36,13 +36,13 @@ export default [
     },
   },
   {
-    files: ["frontend/**/*.ts", "frontend/**/*.tsx", "examples/frontend/**/*.ts", "examples/frontend/**/*.tsx"],
+    files: ["frontend/**/*.ts", "frontend/**/*.tsx"],
     languageOptions: {
       globals: globals.browser,
     },
   },
   {
-    files: ["backend/legacy/**", "examples/backend/legacy/**"],
+    files: ["backend/legacy/**"],
     rules: {
       "no-undef": "off",
       "@typescript-eslint/consistent-type-imports": "off",

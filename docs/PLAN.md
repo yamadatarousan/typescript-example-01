@@ -3,17 +3,14 @@
 ## 前提
 - 学習は「動くTODOアプリを段階的に育てる」形式で進める
 - 1フェーズごとに「動くもの」を必ず作る
-- バックエンド（写経）は `backend/` に置く（内部の `src/` 構造は維持）
-- バックエンド（参照）は `examples/backend/` に置く（内部の `src/` 構造は維持）
-- フロントエンド（写経）は `frontend/` に置く
-- フロントエンド（参照）は `examples/frontend/` に置く
+- バックエンドは `backend/` に置く（内部の `src/` 構造は維持）
+- フロントエンドは `frontend/` に置く
 - コメントは日本語で書く
 - テスト名は日本語で書く
 - 変更ごとに動作確認を行う
 
 ## ファイル命名/配置のルール
 
-- `examples/` 配下に新しくファイルを追加したら、対応する空ファイルを写経側にも作る
 - typeは「そのファイルだけで使うなら同一ファイル、複数箇所で使うなら `types/` に置く」
 - Reactコンポーネントは `PascalCase.tsx`（例: `TodoApp.tsx`）
 - hooksは `useXxx.ts`（例: `useAuth.ts`）
@@ -311,8 +308,7 @@ backend/src/
 
 ## ディレクトリ運用ルール
 
-- AIが出す参照コード: `examples/backend/`, `examples/frontend/`
-- 自分で写経するコード: `backend/`, `frontend/`
+- `backend/` と `frontend/` に統一して運用する
 - フェーズごとの分割は行わない
 
 ---

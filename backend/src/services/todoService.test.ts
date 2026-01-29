@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { DomainError, domainErrorCodes } from "../domain/errors/domainError.js";
+import { domainErrorCodes } from "../domain/errors/domainError.js";
 import { updateTodoForUser, deleteTodoForUser } from "./todoService.js";
 import {
   findTodoByIdForUser,

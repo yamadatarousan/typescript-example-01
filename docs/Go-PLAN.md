@@ -1,7 +1,7 @@
 # go-example-01 プロジェクト拡張プラン
 
 ## 前提
-- AIはexamplesディレクトリ配下しか手を付けない
+- AIはプロジェクトディレクトリ配下を編集する
 - AIはプロジェクトディレクトリの直下を原則として編集しない(README.mdやPLAN.mdなどのドキュメントを除く)
 - 終わったタスクについてと進捗状況について切りの良いタイミングでDONE.mdに書き込んでいく
 - コメントは日本語で書くこと
@@ -9,14 +9,12 @@
   - **Docker関連ファイルは常にプロジェクトルート直下のものを使用する**
     - `docker-compose.test.yml`
     - `testdata/seed.sql`
-  - examples配下のテストコードも、プロジェクトルート直下のDocker設定・テストデータを参照する
   - これらのファイルを修正する際は、**例外的にプロジェクトルート直下を直接編集してよい**
   - 理由: 相対パスの不一致によるバグを防ぐため、Docker設定とテストデータは1箇所に集約する
   - **📝 main_test.goの実装方式**:
     - `getProjectRoot()`関数でgo.modを探してプロジェクトルートを自動検出
     - `filepath.Join(projectRoot, "docker-compose.test.yml")` でパス構築
-    - これにより`examples/cmd/api/`でも`cmd/api/`でも**同じコード**で動作する
-    - **そのまま写経しても正しく動作する**設計
+    - これにより`cmd/api/`でも**同じコード**で動作する
 - **🧪 テストの原則**:
   - **新しいエンドポイントを追加するたびに、そのエンドポイントの動作確認テストも必ず追加する**
   - 手動での動作確認に頼らず、自動テストで品質を保証する
@@ -52,7 +50,6 @@ go-example-01/
 ├── integration_test.go       # 統合テスト
 ├── db/migrations/            # マイグレーションファイル（7個）
 ├── testdata/                 # テスト用シードデータ
-├── examples/                 # 実装例（PUT/DELETE追加済み）
 └── docker-compose.yml        # PostgreSQL設定
 ```
 
@@ -426,7 +423,7 @@ Phase 3に進む前に、Phase 1およびPhase 2で実装された全エンド�
 - ロールベースアクセス制御（管理者権限）のテスト
 
 **テストファイル**:
-- `examples/tests/integration/endpoint_test.go` - 全エンドポイントのテスト
+- `tests/integration/endpoint_test.go` - 全エンドポイントのテスト
 - 既存の `integration_test.go` を拡張する形でも可
 
 #### 成果物

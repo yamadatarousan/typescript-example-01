@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { scryptSync } from "crypto";
-import { DomainError, domainErrorCodes } from "../domain/errors/domainError.js";
+import { domainErrorCodes } from "../domain/errors/domainError.js";
 import { signUp, login } from "./authService.js";
 import { findUserByEmail, createUser } from "../repositories/userRepository.js";
 import jwt from "jsonwebtoken";
